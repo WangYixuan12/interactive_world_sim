@@ -1,0 +1,11 @@
+.vscode/
+.claude/
+.DS_Store
+split_video.py
+media/full_videos/
+data/
+deploy/
+outputs/
+*.egg-info
+interactive_world_sim/
+

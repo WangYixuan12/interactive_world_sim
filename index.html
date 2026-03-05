@@ -1,0 +1,1403 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="Interactive World Simulator for Robot Policy Training and Evaluation" name="description" />
+  <meta content="width=device-width, initial-scale=1" name="viewport" />
+  <title>Interactive World Simulator | for Robot Policy Training and Evaluation</title>
+  <meta content="Interactive World Simulator for Robot Policy Training and Evaluation" property="og:title" />
+  <meta content="Interactive World Simulator for Robot Policy Training and Evaluation" property="og:description" />
+  <meta content="website" property="og:type" />
+  <meta content="media/preview-card-1080p.jpg" property="og:image" />
+  <meta content="1920" property="og:image:width" />
+  <meta content="1080" property="og:image:height" />
+  <meta content="image/jpeg" property="og:image:type" />
+  <meta content="Interactive World Simulator project preview card" property="og:image:alt" />
+  <meta content="media/preview-card-180p.jpg" property="og:image" />
+  <meta content="320" property="og:image:width" />
+  <meta content="180" property="og:image:height" />
+  <meta content="image/jpeg" property="og:image:type" />
+  <meta content="Interactive World Simulator project preview card" property="og:image:alt" />
+  <meta content="summary_large_image" name="twitter:card" />
+  <meta content="Interactive World Simulator for Robot Policy Training and Evaluation" name="twitter:title" />
+  <meta content="Interactive World Simulator for Robot Policy Training and Evaluation" name="twitter:description" />
+  <meta content="media/preview-card-1080p.jpg" name="twitter:image" />
+  <meta content="Interactive World Simulator project preview card" name="twitter:image:alt" />
+  <link href="media/preview-card-180p.jpg" rel="icon" type="image/jpeg" />
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet" />
+  <link href="./static/css/bulma.min.css" rel="stylesheet" />
+  <link href="./static/css/bulma-carousel.min.css" rel="stylesheet" />
+  <link href="./static/css/bulma-slider.min.css" rel="stylesheet" />
+  <link href="./static/css/fontawesome.all.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css" rel="stylesheet" />
+  <link href="./static/css/index.css?v=2" rel="stylesheet" />
+  <link href="./static/source_serif_4.css" rel="stylesheet" />
+  <link href="./static/source_sans_3.css" rel="stylesheet" />
+  <link href="./static/academicons.min.css" rel="stylesheet" />
+  <link href="./static/fontawesome/css/fontawesome.css" rel="stylesheet" />
+  <link href="./static/fontawesome/css/brands.css" rel="stylesheet" />
+  <link href="./static/fontawesome/css/light.css" rel="stylesheet" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer="" src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+</head>
+
+<body>
+  <!-- Scroll progress bar -->
+  <div id="scroll-progress"></div>
+
+  <!-- TOC sidebar -->
+  <div class="section-tracker" id="section-tracker">
+    <nav class="toc-nav">
+      <a class="toc-item" data-id="interactive-demo" href="#interactive-demo">Interactive Demo</a>
+      <a class="toc-item" data-id="abstract" href="#abstract">TL;DR</a>
+      <a class="toc-item" data-id="walkthrough" href="#walkthrough">Walkthrough</a>
+      <a class="toc-item" data-id="experiments" href="#experiments">Interactive World Model</a>
+      <a class="toc-item" data-id="data-generation" href="#data-generation">Policy Training</a>
+      <a class="toc-item" data-id="correlation" href="#correlation">Policy Evaluation</a>
+      <a class="toc-item" data-id="long-interaction" href="#long-interaction">10-Min Interaction</a>
+    </nav>
+  </div>
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-fullhd">
+        <div class="columns is-centered">
+          <div class="column is-10 has-text-centered">
+            <h1 class="title is-1 publication-title">
+              <span class="title-gradient">Interactive World Simulator</span><br />
+              <span class="title-subtitle">for Robot Policy Training and Evaluation</span>
+            </h1>
+            <div class="is-size-5 publication-authors">
+              <span class="author-block"><a href="https://yixuanwang.me/" target="_blank">Yixuan
+                  Wang</a><sup>1</sup>,</span>&emsp;
+              <span class="author-block"><a href="https://rhythmsyed.github.io/" target="_blank">Rhythm
+                  Syed</a><sup>1</sup>,</span>&emsp;
+              <span class="author-block"><a href="https://fangyuwu.com/" target="_blank">Fangyu
+                  Wu</a><sup>1</sup>,</span>&emsp;
+              <span class="author-block"><a href="https://zmccmzty.github.io/" target="_blank">Mengchao
+                  Zhang</a><sup>2</sup>,</span>&emsp;
+              <span class="author-block"><a href="https://scholar.google.com/citations?user=mMYFmOYAAAAJ&hl=en"
+                  target="_blank">Aykut Onol</a><sup>2</sup>,</span>&emsp;
+              <span class="author-block"><a href="https://scholar.google.com/citations?user=mLFRRpkAAAAJ&hl=en"
+                  target="_blank">Jose Barreiros</a><sup>2</sup>,</span>
+              <br>
+              <span class="author-block"><a href="https://www.amazon.science/author/hooshang-nayyeri"
+                  target="_blank">Hooshang Nayyeri</a><sup>3</sup>,</span>&emsp;
+              <span class="author-block"><a href="https://tonydear.com/" target="_blank">Tony
+                  Dear</a><sup>1</sup>,</span>&emsp;
+              <span class="author-block"><a href="https://www.huan-zhang.com/" target="_blank">Huan
+                  Zhang</a><sup>4</sup>,</span>&emsp;
+              <span class="author-block"><a href="https://yunzhuli.github.io/" target="_blank">Yunzhu
+                  Li</a><sup>1</sup></span>
+            </div>
+            <div class="is-size-5 affiliation">
+              <sup>1</sup>Columbia University&emsp;
+              <sup>2</sup>Toyota Research Institute&emsp;
+              <sup>3</sup>Amazon&emsp;
+              <sup>4</sup>University of Illinois Urbana-Champaign
+            </div>
+            <div class="affiliation-logos">
+              <img src="media/figures/columbia_logo.png" alt="Columbia University" />
+              <img src="media/figures/tri_logo.png" alt="Toyota Research Institute" />
+              <img src="media/figures/amazo_logo.png" alt="Amazon" />
+              <img src="media/figures/uiuc_logo.png" alt="University of Illinois Urbana-Champaign" />
+            </div>
+            <div class="button-container">
+              <a class="button" href="texts/main.pdf" rel="noopener" target="_blank"><i class="fa-light fa-file"></i>&nbsp;PDF</a>
+              <a class="button" href="#" rel="noopener" target="_blank"><i class="ai ai-arxiv"></i>&nbsp;arXiv (Coming Soon)</a>
+              <a class="button" href="https://youtu.be/H6Um4zZYm5Y" rel="noopener" target="_blank"><i class="fa-light fa-film"></i>&nbsp;Video</a>
+              <a class="button" href="https://github.com/WangYixuan12/interactive_world_sim" rel="noopener" target="_blank"><i class="fa-light fa-code"></i>&nbsp;Code</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section teaser-section">
+    <div class="container is-max-widescreen">
+      <div style="margin:0 auto;" class="experiment-video-wrapper">
+        <video playsinline preload="metadata"
+          style="width: 100%; aspect-ratio: 16 / 9; border-radius: 8px;">
+          <source src="media/videos/teaser.mp4" type="video/mp4" />
+        </video>
+      </div>
+      <h2 class="subtitle has-text-centered teaser-caption"
+        style="--teaser-caption-size: 1.0rem; --teaser-caption-line-height: 1.55;">
+        Interactive World Simulator supports stable long-horizon interactions for <strong class="emph">more than 10 minutes at 15 FPS</strong>, which unlock two critical robot learning applications: <strong class="emph">scalable data generation for
+        policy training</strong> and <strong class="emph">faithful policy evaluation</strong>.
+      </h2>
+    </div>
+  </section>
+  <section class="section" id="interactive-demo">
+    <div class="container is-max-widescreen">
+      <h2 class="title is-3 has-text-centered">Interactive Demo</h2>
+      <div style="max-width:960px;margin:0 auto 1.5rem;">
+        <div class="content has-text-justified">
+          <p>
+            Our world model is an action-conditioned video prediction model: given the initial frame and a sequence of actions,
+            it predicts future frames purely in pixel space, without any physics engine.
+            Here you can interact with it directly. Select one of the four tasks below, click <strong>Connect</strong>,
+            and use your keyboard to control the robot end-effectors.
+            <strong class="emph">Note: the cloud server may be laggy or unavailable due to resource limits.</strong>
+            For a smooth, low-latency experience, consider
+            <a href="https://github.com/WangYixuan12/interactive_world_sim/tree/main?tab=readme-ov-file#%EF%B8%8F-local-interactive-demo" target="_blank" rel="noopener" style="color:#3273dc;text-decoration:underline;">running the server locally</a>
+            and using <strong>Connect Locally</strong>.
+          </p>
+          <!-- <p style="color:#555;">
+            <strong>Tasks:</strong> T Pushing (top-down T-block pushing), Rope Routing (routing a rope around pegs),
+            Mug Grasping (single-arm pick-and-place), Pile Sweeping (sweeping objects into a bin).
+            <strong>Controls:</strong> WASD moves the left arm; IJKL / UO moves the right arm; QE / UO open/close the gripper
+            depending on the task.
+          </p> -->
+        </div>
+      </div>
+      <div style="max-width:960px;margin:0 auto;">
+      <div class="interactive-panel">
+
+        <!-- Controls bar -->
+        <div class="interactive-card demo-topbar-card">
+          <div class="demo-topbar">
+            <div class="demo-topbar-group">
+              <label class="demo-label" for="demo-task-select">Task</label>
+              <select class="demo-select" id="demo-task-select">
+                <option value="pusht">T Pushing</option>
+                <option value="bimanual_rope_cam_0">Rope Routing</option>
+                <option value="single_grasp_cam_0">Mug Grasping</option>
+                <option value="bimanual_sweep_cam_0">Pile Sweeping</option>
+              </select>
+            </div>
+            <div class="demo-topbar-group" style="flex-wrap:wrap;gap:6px;">
+              <button class="demo-connect-btn" id="demo-connect-btn">
+                <i class="fa-light fa-plug"></i>&nbsp;Connect
+              </button>
+              <button class="demo-connect-btn" id="demo-local-btn" title="Connect to a locally running server">
+                <i class="fa-light fa-house"></i>&nbsp;Connect Locally
+              </button>
+              <button class="demo-reset-btn" id="demo-reset-btn" disabled>
+                <i class="fa-light fa-rotate-right"></i>&nbsp;Reset
+              </button>
+            </div>
+            <div class="demo-topbar-group">
+              <span class="demo-dot" id="demo-dot"></span>
+              <span class="demo-status-text" id="demo-status-text">Disconnected</span>
+            </div>
+            <div class="demo-topbar-group demo-latency-group">
+              <span class="demo-label">Latency</span>
+              <span class="demo-latency-val"><span id="demo-latency">&mdash;</span>&thinsp;ms</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Keyboard visualization -->
+        <div class="interactive-card demo-keys-card">
+          <div class="demo-keyboard">
+            <div class="demo-keys-group">
+              <div class="demo-keys-title" id="demo-keys-left-title">Left Arm</div>
+              <div class="demo-keys-block">
+                <div class="demo-key-row">
+                  <div class="demo-key" id="dkey-q">Q</div>
+                  <div class="demo-key" id="dkey-w">W</div>
+                  <div class="demo-key" id="dkey-e">E</div>
+                </div>
+                <div class="demo-key-row">
+                  <div class="demo-key" id="dkey-a">A</div>
+                  <div class="demo-key" id="dkey-s">S</div>
+                  <div class="demo-key" id="dkey-d">D</div>
+                </div>
+              </div>
+              <div class="demo-keys-hint" id="demo-keys-left-hint">AD: X-axis, WS: Y-axis</div>
+            </div>
+            <!-- <div class="demo-keys-divider"></div> -->
+            <div class="demo-canvas-wrapper">
+              <canvas id="demo-canvas" width="400" height="400"></canvas>
+              <span class="demo-live-badge" id="demo-live-badge">&#9679;&nbsp;LIVE</span>
+            </div>
+            <div class="demo-keys-group">
+              <div class="demo-keys-title" id="demo-keys-right-title">Right Arm / Gripper</div>
+              <div class="demo-keys-block">
+                <div class="demo-key-row">
+                  <div class="demo-key" id="dkey-u">U</div>
+                  <div class="demo-key" id="dkey-i">I</div>
+                  <div class="demo-key" id="dkey-o">O</div>
+                </div>
+                <div class="demo-key-row">
+                  <div class="demo-key" id="dkey-j">J</div>
+                  <div class="demo-key" id="dkey-k">K</div>
+                  <div class="demo-key" id="dkey-l">L</div>
+                </div>
+              </div>
+              <div class="demo-keys-hint" id="demo-keys-right-hint">IJKL · XY</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      </div><!-- /max-width wrapper -->
+    </div>
+  </section>
+  <section class="section" id="abstract">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-left">
+        <div class="column">
+          <h2 class="title is-3 has-text-centered">TL;DR</h2>
+          <div class="content has-text-justified">
+            <li>
+              <strong>Interactive World Simulator:</strong> World models that support
+              stable long-horizon interactions for more than 10 minutes at 15 FPS.
+            </li>
+            <li>
+              <strong>Scalable Data Generation for <u>Policy Training</u>:</strong> Generate data with quality comparable to real-world data for policy training.
+            </li>
+            <li>
+              <strong>Faithful Rollout for <u>Policy Evaluation</u>:</strong> Our interactive world simulator serves as a faithful evaluation engine for policies, demonstrating strong correlation with real-world performance and world-model performance.
+            </li>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section" id="walkthrough">
+    <div class="container is-max-widescreen">
+      <h2 class="title is-3 has-text-centered">Walkthrough Video</h2>
+      <!-- <div style="max-width:960px;margin:0 auto 1.5rem;">
+        <div class="content has-text-justified">
+          <p>
+            This video walks through the full Interactive World Simulator framework — from how we build the world model
+            using a two-stage pipeline (image autoencoder + latent action-conditioned dynamics), to how we use it to
+            generate training data for imitation policies, and finally how we use it as a policy evaluation environment
+            that faithfully reflects real-world performance.
+          </p>
+        </div>
+      </div> -->
+      <div style="max-width:960px;margin:0 auto;" class="experiment-video-wrapper">
+        <video playsinline preload="metadata"
+          style="width: 100%; aspect-ratio: 16 / 9; border-radius: 8px;">
+          <source src="media/videos/walkthru.mp4" type="video/mp4" />
+        </video>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="experiments">
+    <div class="container is-max-widescreen">
+      <h2 class="title is-3 has-text-centered">Interactive World Model</h2>
+      <div style="max-width:960px;margin:0 auto 1.5rem;">
+        <p class="content has-text-justified">
+          Our Interactive World Simulator supports diverse robot manipulation tasks, ranging from rigid-body contact
+          (T pushing) to deformable object manipulation (rope routing) and object pile manipulation (sweeping objects
+          into a bin). Each video below is a live interaction from a teleoperation device.
+          Note that the videos on the monitor and the left side are from open-loop live prediction. They are <strong class="emph">NOT from real cameras</strong>.
+          The frames are generated entirely by our interactive world simulators in response to action sequences.
+        </p>
+      </div>
+      <div style="max-width:960px;margin:0 auto;">
+        <!-- T Pushing -->
+        <div class="box experiment-card has-text-centered">
+          <h3 class="title is-5">T Pushing (Rigid Object) &nbsp &nbsp
+          <div class="select is-small is-rounded">
+            <select onchange="switchInteractionVideo(this,'pusht')">
+              <option value="media/videos/interaction/pusht_example_1.mp4">Example 1</option>
+              <option value="media/videos/interaction/pusht_example_2.mp4">Example 2</option>
+            </select>
+          </div></h3>
+          <div class="experiment-video-wrapper" style="margin-bottom:0" id="interaction-pusht">
+            <video class="experiment-video" loop="" muted="" playsinline="">
+              <source src="media/videos/interaction/pusht_example_1.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </div>
+        Our interactive world simulator can understand rigid interactions between T and grippers, which is purely learned from interaction data <strong class="emph">without any physics priors</strong>.
+        <br><br>
+        <!-- Rope Routing -->
+        <div class="box experiment-card has-text-centered">
+          <h3 class="title is-5">Rope Routing (Deformable Object) &nbsp &nbsp
+          <div class="select is-small is-rounded">
+            <select onchange="switchInteractionVideo(this,'bimanual_rope')">
+              <option value="media/videos/interaction/bimanual_rope_example_1.mp4">Example 1</option>
+              <option value="media/videos/interaction/bimanual_rope_example_2.mp4">Example 2</option>
+            </select>
+          </div></h3>
+          <div class="experiment-video-wrapper" style="margin-bottom:0" id="interaction-bimanual_rope">
+            <video class="experiment-video" loop="" muted="" playsinline="">
+              <source src="media/videos/interaction/bimanual_rope_example_1.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </div>
+        Deformable-rigid object interaction is challenging to model. Our model can accurately understand both cases when the rope is inserted into the clip and when the rope swings outside without making real contact.
+        Our model <strong class="emph">does not hallucinate or bias toward either case</strong>. Instead, it faithfully captures the complex dynamics of both scenarios.
+        <br><br>
+        <!-- Mug Grasping -->
+        <div class="box experiment-card has-text-centered">
+          <h3 class="title is-5">Mug Grasping (Fine-Grained Dynamics for Rigid Object) &nbsp &nbsp
+          <div class="select is-small is-rounded">
+            <select onchange="switchInteractionVideo(this,'single_grasp')">
+              <option value="media/videos/interaction/single_grasp_example_1.mp4">Example 1</option>
+              <option value="media/videos/interaction/single_grasp_example_2.mp4">Example 2</option>
+            </select>
+          </div></h3>
+          <div class="experiment-video-wrapper" style="margin-bottom:0" id="interaction-single_grasp">
+            <video class="experiment-video" loop="" muted="" playsinline="">
+              <source src="media/videos/interaction/single_grasp_example_1.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </div>
+        Our model can understand very <strong class="emph">fine-grained dynamics of rigid object interaction</strong>, such as the mug sliding out of the gripper and the mug handle being pushed and rotated.
+        <br><br>
+        <!-- Pile Sweeping -->
+        <div class="box experiment-card has-text-centered">
+          <h3 class="title is-5">Pile Sweeping (Object Pile) &nbsp &nbsp
+          <div class="select is-small is-rounded">
+            <select onchange="switchInteractionVideo(this,'bimanual_sweep')">
+              <option value="media/videos/interaction/bimanual_sweep_example_1.mp4">Example 1</option>
+              <option value="media/videos/interaction/bimanual_sweep_example_2.mp4">Example 2</option>
+            </select>
+          </div></h3>
+          <div class="experiment-video-wrapper" style="margin-bottom:0" id="interaction-bimanual_sweep">
+            <video class="experiment-video" loop="" muted="" playsinline="">
+              <source src="media/videos/interaction/bimanual_sweep_example_1.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </div>
+        Our model can capture the complex dynamics of object pile manipulation, such as the object pile being swept into the bin.
+        <br><br>
+      </div><!-- /max-width wrapper -->
+    </div>
+  </section>
+
+  <section class="section" id="data-generation">
+    <div class="container is-max-widescreen">
+      <h2 class="title is-3 has-text-centered">Scalable Data Generation for <u>Policy Training</u></h2>
+
+      <div style="max-width:960px;margin:0 auto 1.5rem;">
+        <div class="content has-text-justified">
+          <p>
+            Collecting real-world robot demonstrations is expensive and time-consuming.
+            Our world simulator enables data collection using only teleoperation devices.
+            But the question is: <strong class="emph">can generated demonstrations
+            actually substitute for real-world demonstrations when training imitation learning policies?</strong>
+            Our answer is <strong class="emph">YES</strong>!
+          </p>
+          <p>
+            We train imitation learning policies <strong class="emph">using 100% generated data and 0% real data</strong>.
+            The following videos are <strong class="emph">autonomous</strong> imitation policy rollouts in the real world.
+            We show that we can train imitation policies using pure simulation data, that are robust under continuous perturbations.
+          </p>
+        </div>
+      </div>
+
+      <div style="max-width:960px;margin:0 auto;">
+      <div class="columns is-multiline">
+        <div class="column is-half">
+          <div class="box experiment-card has-text-centered">
+            <h3 class="title is-5">T Pushing</h3>
+            <div class="experiment-video-wrapper" style="margin-bottom:0">
+              <video class="experiment-video" loop="" muted="" playsinline="">
+                <source src="media/videos/data_gen/bimanual_push.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </div>
+        </div>
+        <div class="column is-half">
+          <div class="box experiment-card has-text-centered">
+            <h3 class="title is-5">Rope Routing</h3>
+            <div class="experiment-video-wrapper" style="margin-bottom:0">
+              <video class="experiment-video" loop="" muted="" playsinline="">
+                <source src="media/videos/data_gen/bimanual_rope.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </div>
+        </div>
+        <div class="column is-half">
+          <div class="box experiment-card has-text-centered">
+            <h3 class="title is-5">Pile Sweeping</h3>
+            <div class="experiment-video-wrapper" style="margin-bottom:0">
+              <video class="experiment-video" loop="" muted="" playsinline="">
+                <source src="media/videos/data_gen/bimanual_sweep.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </div>
+        </div>
+        <div class="column is-half">
+          <div class="box experiment-card has-text-centered">
+            <h3 class="title is-5">Mug Grasping</h3>
+            <div class="experiment-video-wrapper" style="margin-bottom:0">
+              <video class="experiment-video" loop="" muted="" playsinline="">
+                <source src="media/videos/data_gen/single_grasp.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div><!-- /max-width wrapper -->
+      <br><br>
+      <!-- Figure: data mixture results — caption before image -->
+      <div style="max-width:960px;margin:0 auto 1.5rem;">
+        <div class="content has-text-justified">
+          <p>
+            To quantitatively study the generated data quality, we benchmark four imitation learning policies, including DP, ACT, π<sub>0</sub>, and
+            π<sub>0.5</sub>, across five manipulation tasks: T pushing (in MuJoCo simulation and in the
+            real world), pile sweeping, mug grasping, and rope routing. For all experiments, we fix the total
+            dataset size at 100 demonstration episodes and vary the proportion of generated data versus real-world data in the training set, sweeping across the full spectrum from 0% to 100% world-model data.
+            We find that performance remains comparable across the entire data mixture spectrum, indicating that <strong class="emph">our world-model data quality is comparable to real-world data for imitation policy training</strong>.
+          </p>
+        </div>
+      </div>
+      <br><br>
+      
+      <div style="max-width:960px;margin:0 auto;">
+        <figure class="image mb-5">
+          <img src="media/figures/data_gen.png" style="border-radius:8px;" />
+        </figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="correlation">
+    <div class="container is-max-widescreen">
+      <h2 class="title is-3 has-text-centered">Faithful <u>Policy Evaluation</u></h2>
+      <div style="max-width:960px;margin:0 auto 1.5rem;">
+        <div class="content has-text-justified">
+          <p>
+            Our world model can serve as a <strong class="emph">scalable, reproducible, and faithful policy evaluator</strong>.
+            The following qualitative videos show that a <strong class="correlation-policy-good">good policy</strong> that
+            succeeds in our world simulator also succeeds on the real robot, while a
+            <strong class="correlation-policy-bad">bad policy</strong> that fails in the world model
+            fails in the real world too. Different policies, both good ones and bad ones, show similar behavior in the world model and in the real world, demonstrating strong correlation between our world model and the real world.
+          </p>
+        </div>
+      </div>
+      <div style="max-width:960px;margin:0 auto;">
+      <!-- Legend -->
+      <div class="is-flex is-align-items-center is-justify-content-center mb-5" style="gap:2rem">
+        <span class="is-flex is-align-items-center" style="gap:0.5rem">
+          <span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#3B76AF"></span>
+          <span style="font-family:'Google Sans',sans-serif;font-size:0.85rem;font-weight:600;color:#3B76AF">Real World</span>
+        </span>
+        <span class="is-flex is-align-items-center" style="gap:0.5rem">
+          <span style="display:inline-block;width:18px;height:18px;border-radius:4px;background:#EF8636"></span>
+          <span style="font-family:'Google Sans',sans-serif;font-size:0.85rem;font-weight:600;color:#EF8636">World Model</span>
+        </span>
+      </div>
+      <div class="columns is-multiline">
+
+        <!-- T Pushing -->
+        <div class="column is-half">
+          <div class="box experiment-card has-text-centered">
+            <h3 class="title is-5">T Pushing <span class="correlation-policy-bad">(Bad Policy)</span></h3>
+            <div class="columns is-variable is-2 mb-0">
+              <div class="column">
+                <p class="correlation-source-label is-real">Real World</p>
+                <div class="experiment-video-wrapper video-border-real" style="margin-bottom:0">
+                  <video class="experiment-video" loop="" muted="" playsinline="">
+                    <source src="media/videos/correlation/bimanual_push_bad_real.mp4" type="video/mp4" />
+                  </video>
+                </div>
+              </div>
+              <div class="column">
+                <p class="correlation-source-label is-wm">World Model</p>
+                <div class="experiment-video-wrapper video-border-wm" style="margin-bottom:0">
+                  <video class="experiment-video" loop="" muted="" playsinline="">
+                    <source src="media/videos/correlation/bimanual_push_bad_wm.mp4" type="video/mp4" />
+                  </video>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="column is-half">
+          <div class="box experiment-card has-text-centered">
+            <h3 class="title is-5">T Pushing <span class="correlation-policy-good">(Good Policy)</span></h3>
+            <div class="columns is-variable is-2 mb-0">
+              <div class="column">
+                <p class="correlation-source-label is-real">Real World</p>
+                <div class="experiment-video-wrapper video-border-real" style="margin-bottom:0">
+                  <video class="experiment-video" loop="" muted="" playsinline="">
+                    <source src="media/videos/correlation/bimanual_push_good_real.mp4" type="video/mp4" />
+                  </video>
+                </div>
+              </div>
+              <div class="column">
+                <p class="correlation-source-label is-wm">World Model</p>
+                <div class="experiment-video-wrapper video-border-wm" style="margin-bottom:0">
+                  <video class="experiment-video" loop="" muted="" playsinline="">
+                    <source src="media/videos/correlation/bimanual_push_good_wm.mp4" type="video/mp4" />
+                  </video>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Rope Routing -->
+        <div class="column is-half">
+          <div class="box experiment-card has-text-centered">
+            <h3 class="title is-5">Rope Routing <span class="correlation-policy-bad">(Bad Policy)</span></h3>
+            <div class="columns is-variable is-2 mb-0">
+              <div class="column">
+                <p class="correlation-source-label is-real">Real World</p>
+                <div class="experiment-video-wrapper video-border-real" style="margin-bottom:0">
+                  <video class="experiment-video" loop="" muted="" playsinline="">
+                    <source src="media/videos/correlation/bimanual_rope_bad_real.mp4" type="video/mp4" />
+                  </video>
+                </div>
+              </div>
+              <div class="column">
+                <p class="correlation-source-label is-wm">World Model</p>
+                <div class="experiment-video-wrapper video-border-wm" style="margin-bottom:0">
+                  <video class="experiment-video" loop="" muted="" playsinline="">
+                    <source src="media/videos/correlation/bimanual_rope_bad_wm.mp4" type="video/mp4" />
+                  </video>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="column is-half">
+          <div class="box experiment-card has-text-centered">
+            <h3 class="title is-5">Rope Routing <span class="correlation-policy-good">(Good Policy)</span></h3>
+            <div class="columns is-variable is-2 mb-0">
+              <div class="column">
+                <p class="correlation-source-label is-real">Real World</p>
+                <div class="experiment-video-wrapper video-border-real" style="margin-bottom:0">
+                  <video class="experiment-video" loop="" muted="" playsinline="">
+                    <source src="media/videos/correlation/bimanual_rope_good_real.mp4" type="video/mp4" />
+                  </video>
+                </div>
+              </div>
+              <div class="column">
+                <p class="correlation-source-label is-wm">World Model</p>
+                <div class="experiment-video-wrapper video-border-wm" style="margin-bottom:0">
+                  <video class="experiment-video" loop="" muted="" playsinline="">
+                    <source src="media/videos/correlation/bimanual_rope_good_wm.mp4" type="video/mp4" />
+                  </video>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pile Sweeping -->
+        <div class="column is-half">
+          <div class="box experiment-card has-text-centered">
+            <h3 class="title is-5">Pile Sweeping <span class="correlation-policy-bad">(Bad Policy)</span></h3>
+            <div class="columns is-variable is-2 mb-0">
+              <div class="column">
+                <p class="correlation-source-label is-real">Real World</p>
+                <div class="experiment-video-wrapper video-border-real" style="margin-bottom:0">
+                  <video class="experiment-video" loop="" muted="" playsinline="">
+                    <source src="media/videos/correlation/bimanual_sweep_bad_real.mp4" type="video/mp4" />
+                  </video>
+                </div>
+              </div>
+              <div class="column">
+                <p class="correlation-source-label is-wm">World Model</p>
+                <div class="experiment-video-wrapper video-border-wm" style="margin-bottom:0">
+                  <video class="experiment-video" loop="" muted="" playsinline="">
+                    <source src="media/videos/correlation/bimanual_sweep_bad_wm.mp4" type="video/mp4" />
+                  </video>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="column is-half">
+          <div class="box experiment-card has-text-centered">
+            <h3 class="title is-5">Pile Sweeping <span class="correlation-policy-good">(Good Policy)</span></h3>
+            <div class="columns is-variable is-2 mb-0">
+              <div class="column">
+                <p class="correlation-source-label is-real">Real World</p>
+                <div class="experiment-video-wrapper video-border-real" style="margin-bottom:0">
+                  <video class="experiment-video" loop="" muted="" playsinline="">
+                    <source src="media/videos/correlation/bimanual_sweep_good_real.mp4" type="video/mp4" />
+                  </video>
+                </div>
+              </div>
+              <div class="column">
+                <p class="correlation-source-label is-wm">World Model</p>
+                <div class="experiment-video-wrapper video-border-wm" style="margin-bottom:0">
+                  <video class="experiment-video" loop="" muted="" playsinline="">
+                    <source src="media/videos/correlation/bimanual_sweep_good_wm.mp4" type="video/mp4" />
+                  </video>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Single Grasp -->
+        <div class="column is-half">
+          <div class="box experiment-card has-text-centered">
+            <h3 class="title is-5">Mug Grasping <span class="correlation-policy-bad">(Bad Policy)</span></h3>
+            <div class="columns is-variable is-2 mb-0">
+              <div class="column">
+                <p class="correlation-source-label is-real">Real World</p>
+                <div class="experiment-video-wrapper video-border-real" style="margin-bottom:0">
+                  <video class="experiment-video" loop="" muted="" playsinline="">
+                    <source src="media/videos/correlation/single_grasp_bad_real.mp4" type="video/mp4" />
+                  </video>
+                </div>
+              </div>
+              <div class="column">
+                <p class="correlation-source-label is-wm">World Model</p>
+                <div class="experiment-video-wrapper video-border-wm" style="margin-bottom:0">
+                  <video class="experiment-video" loop="" muted="" playsinline="">
+                    <source src="media/videos/correlation/single_grasp_bad_wm.mp4" type="video/mp4" />
+                  </video>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="column is-half">
+          <div class="box experiment-card has-text-centered">
+            <h3 class="title is-5">Mug Grasping <span class="correlation-policy-good">(Good Policy)</span></h3>
+            <div class="columns is-variable is-2 mb-0">
+              <div class="column">
+                <p class="correlation-source-label is-real">Real World</p>
+                <div class="experiment-video-wrapper video-border-real" style="margin-bottom:0">
+                  <video class="experiment-video" loop="" muted="" playsinline="">
+                    <source src="media/videos/correlation/single_grasp_good_real.mp4" type="video/mp4" />
+                  </video>
+                </div>
+              </div>
+              <div class="column">
+                <p class="correlation-source-label is-wm">World Model</p>
+                <div class="experiment-video-wrapper video-border-wm" style="margin-bottom:0">
+                  <video class="experiment-video" loop="" muted="" playsinline="">
+                    <source src="media/videos/correlation/single_grasp_good_wm.mp4" type="video/mp4" />
+                  </video>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div style="max-width:960px;margin:0 auto 1.5rem;">
+        <div class="content has-text-justified">
+          <p>
+            To quantitatively verify this, we evaluate four policies (DP, ACT, π<sub>0</sub>, π<sub>0.5</sub>) across four tasks,
+            measuring task scores both inside the world model and on the real robot, under identical conditions across all policies and checkpoints.
+            We make sure comparisons are fair by ensuring the same initial configurations within both real world and world model.
+            In the following figure, each point corresponds to a policy checkpoint evaluated under identical settings. We observe strong positive correlations, indicating that evaluation within our world simulator faithfully reflects relative
+            policy performance in the real world.
+          </p>
+        </div>
+      </div>
+
+      <div style="max-width:480px;margin:0 auto;">
+        <figure class="image mb-5">
+          <img src="media/figures/correlation.png" style="border-radius:8px;" />
+        </figure>
+      </div>
+      </div>
+      </div><!-- /max-width wrapper -->
+    </div>
+  </section>
+
+  <section class="section" id="long-interaction">
+    <div class="container is-max-widescreen">
+      <h2 class="title is-3 has-text-centered">10-Minute Interaction</h2>
+      <div style="max-width:960px;margin:0 auto 1.5rem;">
+        <div class="content has-text-justified">
+          <p>
+            Long-horizon stability is one of the hardest problems for video-prediction world models due to accumulated errors.
+            Our world model runs <strong class="emph">open-loop for more than 10 minutes at 15 FPS on a single RTX 4090 GPU</strong>.
+            The videos below show live interaction from a teleoperation device.
+            Note that videos on the monitor and the left side are from open-loop live prediction. They are <strong class="emph">NOT from real cameras</strong>.
+          </p>
+        </div>
+      </div>
+      <div style="max-width:960px;margin:0 auto;">
+      <div class="columns is-multiline">
+        <div class="column is-half">
+          <div class="box experiment-card has-text-centered">
+            <h3 class="title is-5">T Pushing</h3>
+            <div class="experiment-video-wrapper" style="margin-bottom:0">
+              <video class="experiment-video" loop="" muted="" playsinline="">
+                <source src="media/videos/10min/pusht.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </div>
+        </div>
+        <div class="column is-half">
+          <div class="box experiment-card has-text-centered">
+            <h3 class="title is-5">Rope Routing</h3>
+            <div class="experiment-video-wrapper" style="margin-bottom:0">
+              <video class="experiment-video" loop="" muted="" playsinline="">
+                <source src="media/videos/10min/rope.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </div>
+        </div>
+        <div class="column is-half">
+          <div class="box experiment-card has-text-centered">
+            <h3 class="title is-5">Mug Grasping</h3>
+            <div class="experiment-video-wrapper" style="margin-bottom:0">
+              <video class="experiment-video" loop="" muted="" playsinline="">
+                <source src="media/videos/10min/mug.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </div>
+        </div>
+        <div class="column is-half">
+          <div class="box experiment-card has-text-centered">
+            <h3 class="title is-5">Pile Sweeping</h3>
+            <div class="experiment-video-wrapper" style="margin-bottom:0">
+              <video class="experiment-video" loop="" muted="" playsinline="">
+                <source src="media/videos/10min/sweep.mp4" type="video/mp4" />
+              </video>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div><!-- /max-width wrapper -->
+    </div>
+  </section>
+
+  <script>
+    function switchInteractionVideo(select, taskId) {
+      var wrapper = document.getElementById('interaction-' + taskId);
+      var video = wrapper.querySelector('video');
+      var source = video.querySelector('source');
+      source.src = select.value;
+      video.load();
+      video.play();
+    }
+  </script>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const TASK_CFG = {
+        pusht: {
+          title: 'PUSHT (TOP-DOWN)',
+          initImg: 'media/figures/pusht_init.png',
+          leftLabel: 'Left Arm',
+          rightLabel: 'Right Arm',
+          leftHint: 'AD: X-axis, WS: Y-axis',
+          rightHint: 'JL: X-axis, IK: Y-axis',
+          activeKeys: new Set(['KeyW', 'KeyA', 'KeyS', 'KeyD', 'KeyI', 'KeyJ', 'KeyK', 'KeyL']),
+        },
+        bimanual_rope_cam_0: {
+          title: 'BIMANUAL ROPE ROUTING',
+          initImg: 'media/figures/bimanual_rope_init.png',
+          leftLabel: 'Left Arm',
+          rightLabel: 'Right Arm',
+          leftHint: 'AD: X-axis, WS: Y-axis, QE: Z-axis',
+          rightHint: 'JL: X-axis, IK: Y-axis, UO: Z-axis',
+          activeKeys: new Set(['KeyQ', 'KeyW', 'KeyE', 'KeyA', 'KeyS', 'KeyD', 'KeyI', 'KeyJ', 'KeyK', 'KeyL', 'KeyU', 'KeyO']),
+        },
+        single_grasp_cam_0: {
+          title: 'MUG GRASPING',
+          initImg: 'media/figures/single_grasp_init.png',
+          leftLabel: 'Arm',
+          rightLabel: 'Z / Gripper',
+          leftHint: 'AD: X-axis, WS: Y-axis',
+          rightHint: 'IK: Z-axis, JL: Gripper',
+          activeKeys: new Set(['KeyW', 'KeyA', 'KeyS', 'KeyD', 'KeyI', 'KeyJ', 'KeyK', 'KeyL']),
+        },
+        bimanual_sweep_cam_0: {
+          title: 'BIMANUAL SWEEPING',
+          initImg: 'media/figures/bimanual_sweep_init.png',
+          leftLabel: 'Left Arm',
+          rightLabel: 'Right Arm',
+          leftHint: 'AD: X-axis, WS: Y-axis',
+          rightHint: 'JL: X-axis, IK: Y-axis',
+          activeKeys: new Set(['KeyW', 'KeyA', 'KeyS', 'KeyD', 'KeyI', 'KeyJ', 'KeyK', 'KeyL']),
+        },
+      };
+
+      const KEY_EL = {
+        KeyQ: 'dkey-q', KeyW: 'dkey-w', KeyE: 'dkey-e',
+        KeyA: 'dkey-a', KeyS: 'dkey-s', KeyD: 'dkey-d',
+        KeyI: 'dkey-i', KeyJ: 'dkey-j', KeyK: 'dkey-k',
+        KeyL: 'dkey-l', KeyU: 'dkey-u', KeyO: 'dkey-o',
+      };
+
+      const canvas = document.getElementById('demo-canvas');
+      const ctx = canvas.getContext('2d');
+      const btnEl      = document.getElementById('demo-connect-btn');
+      const localBtnEl = document.getElementById('demo-local-btn');
+      const resetEl    = document.getElementById('demo-reset-btn');
+      const selEl    = document.getElementById('demo-task-select');
+      const dotEl   = document.getElementById('demo-dot');
+      const statEl  = document.getElementById('demo-status-text');
+      const latEl   = document.getElementById('demo-latency');
+      const badgeEl = document.getElementById('demo-live-badge');
+
+      const WS_URL = 'wss://wangyixuan0720--diffusion-forcing-demo-web.modal.run/ws';
+      const LOCAL_WS_URL = 'ws://localhost:8000/ws';
+
+      const TICK_MS = 50; // 20 Hz — matches server inference rate, prevents queue flooding
+
+      let ws = null;
+      let hasFrame = false;
+      let switchTimeout = null;
+      let tickId = null;
+
+      const keys = {};
+      Object.keys(KEY_EL).forEach(k => { keys[k] = false; });
+
+      /* ── Preload init images ────────────────────────────────────── */
+      const initImages = {};
+      Object.entries(TASK_CFG).forEach(([id, cfg]) => {
+        const img = new Image();
+        img.onload = () => { if (selEl.value === id && !hasFrame) splash(); };
+        img.src = cfg.initImg;
+        initImages[id] = img;
+      });
+
+      /* ── Splash ─────────────────────────────────────────────────── */
+      function splash(sub) {
+        const cw = canvas.width, ch = canvas.height;
+        const taskId = selEl.value;
+        const cfg = TASK_CFG[taskId] || TASK_CFG.pusht;
+        const img = initImages[taskId];
+        const hasImg   = img && img.complete && img.naturalWidth > 0;
+        const isConn   = sub && sub.startsWith('Connected');
+        const isSwitch = sub && sub.startsWith('Switching');
+
+        if (hasImg) {
+          // Cover-fit the init image then apply overlay
+          const scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+          const dw = img.naturalWidth * scale, dh = img.naturalHeight * scale;
+          ctx.drawImage(img, (cw - dw) / 2, (ch - dh) / 2, dw, dh);
+          // Lighter overlay when connected, standard grey-dark otherwise
+          ctx.fillStyle = isConn ? 'rgba(0,0,0,0.22)' : 'rgba(0,0,0,0.40)';
+          ctx.fillRect(0, 0, cw, ch);
+
+          ctx.textAlign = 'center';
+          ctx.fillStyle = '#ffffff';
+          ctx.font = "bold 26px 'Google Sans', sans-serif";
+          ctx.fillText(cfg.title, cw / 2, ch / 2 - 32);
+
+          ctx.fillStyle = isSwitch ? 'rgba(251,191,36,0.95)' : 'rgba(255,255,255,0.88)';
+          ctx.font = "16px 'Google Sans', sans-serif";
+          ctx.fillText(sub || 'Click Connect to start', cw / 2, ch / 2 + 8);
+
+          ctx.fillStyle = isSwitch ? 'rgba(251,191,36,0.70)' : 'rgba(255,255,255,0.60)';
+          ctx.font = "13px 'Google Sans', sans-serif";
+          ctx.fillText(cfg.leftHint + '  \u00b7  ' + cfg.rightHint, cw / 2, ch / 2 + 36);
+        } else {
+          // Fallback: light blue gradient
+          const g = ctx.createLinearGradient(0, 0, cw, ch);
+          g.addColorStop(0, '#eef3fb');
+          g.addColorStop(1, '#dde7f5');
+          ctx.fillStyle = g;
+          ctx.fillRect(0, 0, cw, ch);
+
+          ctx.textAlign = 'center';
+          ctx.fillStyle = '#1D4F91';
+          ctx.font = "bold 26px 'Google Sans', sans-serif";
+          ctx.fillText(cfg.title, cw / 2, ch / 2 - 32);
+
+          ctx.fillStyle = '#4a6fa5';
+          ctx.font = "16px 'Google Sans', sans-serif";
+          ctx.fillText(sub || 'Click Connect to start', cw / 2, ch / 2 + 8);
+
+          ctx.fillStyle = '#8aabcc';
+          ctx.font = "13px 'Google Sans', sans-serif";
+          ctx.fillText(cfg.leftHint + '  \u00b7  ' + cfg.rightHint, cw / 2, ch / 2 + 36);
+        }
+        ctx.textAlign = 'left';
+      }
+
+      /* ── Keyboard layout update ─────────────────────────────────── */
+      function updateKeyboard(taskId) {
+        const cfg = TASK_CFG[taskId] || TASK_CFG.pusht;
+        document.getElementById('demo-keys-left-title').textContent = cfg.leftLabel;
+        document.getElementById('demo-keys-right-title').textContent = cfg.rightLabel;
+        document.getElementById('demo-keys-left-hint').textContent = cfg.leftHint;
+        document.getElementById('demo-keys-right-hint').textContent = cfg.rightHint;
+        Object.entries(KEY_EL).forEach(([code, elId]) => {
+          const el = document.getElementById(elId);
+          if (el) el.classList.toggle('is-inactive', !cfg.activeKeys.has(code));
+        });
+      }
+
+      /* ── Status helpers ─────────────────────────────────────────── */
+      function setDot(state) {
+        dotEl.className = 'demo-dot' + (state ? ' is-' + state : '');
+      }
+
+      function setStatus(dotState, text) {
+        setDot(dotState);
+        statEl.textContent = text;
+      }
+
+      function setCanvas(state) {
+        canvas.classList.remove('is-idle', 'is-connecting', 'is-live', 'is-switching');
+        canvas.classList.add('is-' + state);
+        badgeEl.className = 'demo-live-badge';
+        if (state === 'live') {
+          badgeEl.textContent = '\u25cf\u00a0LIVE';
+          badgeEl.classList.add('is-visible', 'badge-green');
+        } else if (state === 'connecting') {
+          badgeEl.textContent = '\u25cf\u00a0Connecting\u2026 (\u223c30s)';
+          badgeEl.classList.add('is-visible', 'badge-yellow');
+        } else if (state === 'switching') {
+          badgeEl.textContent = '\u25cf\u00a0Switching\u2026';
+          badgeEl.classList.add('is-visible', 'badge-yellow');
+        }
+      }
+
+      function setBtn(mode, isLocal) {
+        const activeBtn  = isLocal ? localBtnEl : btnEl;
+        const inactiveBtn = isLocal ? btnEl : localBtnEl;
+        if (mode === 'idle') {
+          btnEl.innerHTML = '<i class="fa-light fa-plug"></i>\u00a0Connect';
+          btnEl.className = 'demo-connect-btn';
+          btnEl.disabled = false;
+          localBtnEl.innerHTML = '<i class="fa-light fa-house"></i>\u00a0Connect Locally';
+          localBtnEl.className = 'demo-connect-btn';
+          localBtnEl.disabled = false;
+          resetEl.disabled = true;
+          setCanvas('idle');
+        } else if (mode === 'connecting') {
+          activeBtn.textContent = 'Connecting\u2026 (\u223c30s)';
+          activeBtn.className = 'demo-connect-btn';
+          activeBtn.disabled = true;
+          inactiveBtn.disabled = true;
+          resetEl.disabled = true;
+          setCanvas('connecting');
+        } else if (mode === 'connected') {
+          activeBtn.innerHTML = '<i class="fa-light fa-xmark"></i>\u00a0Disconnect';
+          activeBtn.className = 'demo-connect-btn is-connected';
+          activeBtn.disabled = false;
+          inactiveBtn.disabled = true;
+          resetEl.disabled = false;
+          setCanvas('live');
+        }
+      }
+
+      /* ── WebSocket ──────────────────────────────────────────────── */
+      let activeIsLocal = false;
+
+      function connect(wsUrl, isLocal) {
+        if (ws) dropWS();
+        activeIsLocal = !!isLocal;
+        setBtn('connecting', activeIsLocal);
+        setStatus('connecting', 'Connecting\u2026 (\u223c30s)');
+        splash('Connecting to server\u2026 (\u223c30s)');
+
+        ws = new WebSocket(wsUrl);
+        ws.binaryType = 'arraybuffer';
+
+        ws.onopen = () => {
+          setBtn('connected', activeIsLocal);
+          setStatus('connected', activeIsLocal ? 'Connected (local)' : 'Connected');
+          if (!hasFrame) splash('Connected! Press keys to start');
+          ws.send(JSON.stringify({ type: 'init', task: selEl.value }));
+          startTick();
+        };
+
+        ws.onmessage = async (ev) => {
+          // JSON control message (text frame)
+          if (typeof ev.data === 'string') {
+            const msg = JSON.parse(ev.data);
+            if (msg.type === 'task_ready') {
+              if (switchTimeout) { clearTimeout(switchTimeout); switchTimeout = null; }
+              if (canvas.classList.contains('is-switching')) {
+                setCanvas('live');
+                if (!hasFrame) splash('Connected! Press keys to start');
+              }
+            }
+            return;
+          }
+          // Binary frame (image)
+          const wasSwitching = !hasFrame;
+          hasFrame = true;
+          if (switchTimeout) { clearTimeout(switchTimeout); switchTimeout = null; }
+          const buf = ev.data; // already an ArrayBuffer because ws.binaryType = 'arraybuffer'
+          const tClient = new DataView(buf).getFloat64(0, false); // first 8 bytes, big-endian
+          if (tClient > 0) latEl.textContent = String(Math.round(performance.now() - tClient));
+          const bm = await createImageBitmap(new Blob([new Uint8Array(buf, 8)], { type: 'image/jpeg' }));
+          ctx.drawImage(bm, 0, 0, canvas.width, canvas.height);
+          if (wasSwitching) setCanvas('live');
+        };
+
+        ws.onerror = () => {
+          setStatus('error', 'Connection error');
+          if (!hasFrame) splash('Connection error \u2014 try again');
+        };
+
+        ws.onclose = () => {
+          dropWS(false);
+          setStatus('', 'Disconnected');
+          setBtn('idle', false);
+          if (!hasFrame) splash('Click Connect to start');
+        };
+      }
+
+      function dropWS(callClose = true) {
+        if (ws && callClose) ws.close();
+        ws = null;
+        if (tickId) { clearInterval(tickId); tickId = null; }
+        hasFrame = false;
+        latEl.textContent = '\u2014';
+      }
+
+      /* ── Action send + tick loop ────────────────────────────────── */
+      function sendAction() {
+        if (!ws || ws.readyState !== WebSocket.OPEN) return;
+        ws.send(JSON.stringify({
+          type: 'action',
+          action: {
+            w: +keys.KeyW, s: +keys.KeyS, a: +keys.KeyA, d: +keys.KeyD,
+            q: +keys.KeyQ, e: +keys.KeyE,
+            i: +keys.KeyI, k: +keys.KeyK, j: +keys.KeyJ, l: +keys.KeyL,
+            u: +keys.KeyU, o: +keys.KeyO,
+          },
+          t_client: performance.now(),
+        }));
+      }
+
+      function startTick() {
+        if (tickId) clearInterval(tickId);
+        // 50 ms = 20 Hz: keeps server inferring without flooding its queue.
+        // The root bug was t_client making every JSON unique, causing ~1000 sends/sec
+        // which queued up so key-releases took seconds to reach the server.
+        tickId = setInterval(sendAction, TICK_MS);
+      }
+
+      /* ── Key events ─────────────────────────────────────────────── */
+      window.addEventListener('keydown', (e) => {
+        if (!(e.code in KEY_EL)) return;
+        if (e.target.tagName === 'SELECT' || e.target.tagName === 'INPUT') return;
+        if (ws && ws.readyState === WebSocket.OPEN) e.preventDefault();
+        if (!keys[e.code]) {
+          keys[e.code] = true;
+          const el = document.getElementById(KEY_EL[e.code]);
+          if (el) el.classList.add('is-pressed');
+        }
+      });
+
+      window.addEventListener('keyup', (e) => {
+        if (!(e.code in KEY_EL)) return;
+        keys[e.code] = false;
+        const el = document.getElementById(KEY_EL[e.code]);
+        if (el) el.classList.remove('is-pressed');
+        sendAction(); // immediately flush key-release — don't wait for next tick
+      });
+
+      /* ── Button & task select ───────────────────────────────────── */
+      btnEl.addEventListener('click', () => {
+        if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
+          dropWS();
+          setStatus('', 'Disconnected');
+          setBtn('idle', false);
+          splash('Click Connect to start');
+        } else {
+          connect(WS_URL, false);
+        }
+      });
+
+      localBtnEl.addEventListener('click', () => {
+        if (ws && (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING)) {
+          dropWS();
+          setStatus('', 'Disconnected');
+          setBtn('idle', false);
+          splash('Click Connect to start');
+        } else {
+          connect(LOCAL_WS_URL, true);
+        }
+      });
+
+      resetEl.addEventListener('click', () => {
+        if (!ws || ws.readyState !== WebSocket.OPEN) return;
+        hasFrame = false;
+        setCanvas('switching');
+        splash('Resetting\u2026');
+        ws.send(JSON.stringify({ type: 'set_task', task: selEl.value }));
+        if (switchTimeout) clearTimeout(switchTimeout);
+        switchTimeout = setTimeout(() => {
+          switchTimeout = null;
+          if (canvas.classList.contains('is-switching')) {
+            setCanvas('live');
+            splash('Connected! Press keys to start');
+          }
+        }, 2000);
+      });
+
+      selEl.addEventListener('change', () => {
+        selEl.blur();
+        hasFrame = false;
+        updateKeyboard(selEl.value);
+        if (ws && ws.readyState === WebSocket.OPEN) {
+          setCanvas('switching');
+          splash('Switching task\u2026');
+          ws.send(JSON.stringify({ type: 'set_task', task: selEl.value }));
+          // Fall back to live/ready if no frame arrives (server only sends on key press)
+          if (switchTimeout) clearTimeout(switchTimeout);
+          switchTimeout = setTimeout(() => {
+            switchTimeout = null;
+            if (canvas.classList.contains('is-switching')) {
+              setCanvas('live');
+              splash('Connected! Press keys to start');
+            }
+          }, 2000);
+        } else {
+          splash('Click Connect to start');
+        }
+      });
+
+      /* ── Init ───────────────────────────────────────────────────── */
+      updateKeyboard(selEl.value);
+      setCanvas('idle');
+      splash('Click Connect to start');
+    })();
+  </script>
+
+  <section class="section" id="acknowledgements">
+    <div class="container is-max-widescreen">
+      <h2 class="title is-3 has-text-centered">Acknowledgements</h2>
+      <div style="max-width:960px;margin:0 auto;">
+        <div class="content has-text-justified">
+          <p>
+            This work was partially supported by the Toyota Research Institute, the DARPA TIAMAT program (HR0011-24-9-0430), NSF Award \#2409661, Samsung Research America, and an Amazon Research Award (Fall 2024). This article solely reflects the opinions and conclusions of its authors and should not be interpreted as necessarily representing the official policies, either expressed or implied, of the sponsors.
+            </p>
+            <p>
+            We thank Wenlong Huang for valuable suggestions on the project release. We also thank Hongkai Dai, Basile Van Hoorick, Keyi Shen, Zach Witzel, Jaisel Singh, Binghao Huang, Kaifeng Zhang, Hanxiao Jiang, and other RoboPIL members for helpful discussions during the project.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    (function () {
+      const TOC_IDS = [
+        'interactive-demo', 'abstract', 'walkthrough', 'experiments',
+        'data-generation', 'correlation', 'long-interaction', 'acknowledgements'
+      ];
+
+      const tracker        = document.getElementById('section-tracker');
+      const progressEl     = document.getElementById('scroll-progress');
+      const tocItems       = document.querySelectorAll('.toc-item');
+      const allSections    = TOC_IDS.map(id => document.getElementById(id)).filter(Boolean);
+      const firstSection   = document.getElementById('interactive-demo');
+      const lastSection    = document.getElementById('long-interaction');
+
+      const STICKY_TOP = 68; // px — clears the navbar
+      const OFFSET_PX  = 210;
+      let currentId = null;
+
+      // Apply / remove section left-offset based on viewport width.
+      // Using JS inline setProperty so it wins over any cached CSS.
+      function applyOffsets() {
+        const wide = window.innerWidth >= 1440;
+        allSections.forEach(el => {
+          if (wide) {
+            el.style.setProperty('margin-left', OFFSET_PX + 'px', 'important');
+          } else {
+            el.style.removeProperty('margin-left');
+          }
+        });
+      }
+      applyOffsets();
+      window.addEventListener('resize', applyOffsets, { passive: true });
+
+      function update() {
+        const scrolled = window.scrollY;
+
+        // Progress bar
+        const total = document.documentElement.scrollHeight - window.innerHeight;
+        progressEl.style.width = (total > 0 ? (scrolled / total * 100) : 0) + '%';
+
+        // Visibility: from when interactive-demo enters view until correlation's bottom leaves
+        const inRange = firstSection.getBoundingClientRect().top <= window.innerHeight
+                     && lastSection.getBoundingClientRect().bottom > 0;
+        tracker.classList.toggle('is-visible', inRange);
+
+        // Active section: last one whose top has crossed 50% of the viewport
+        let current = null;
+        for (const s of allSections) {
+          if (s.getBoundingClientRect().top <= window.innerHeight * 0.5) current = s;
+        }
+
+        // Align TOC top with the active section's h2 heading — no CSS transition, instant
+        if (inRange) {
+          const activeSection = firstSection;
+          const heading = activeSection.querySelector('h2') || activeSection;
+          const headingTop = heading.getBoundingClientRect().top;
+          tracker.style.top = Math.max(headingTop, STICKY_TOP) + 'px';
+        }
+
+        if (current && current.id !== currentId) {
+          currentId = current.id;
+          tocItems.forEach(item =>
+            item.classList.toggle('is-active', item.dataset.id === currentId)
+          );
+        } else if (!current) {
+          currentId = null;
+          tocItems.forEach(item => item.classList.remove('is-active'));
+        }
+      }
+
+      window.addEventListener('scroll', update, { passive: true });
+      update();
+    })();
+  </script>
+
+  <!-- ── Video controls: mask + timeline + mute + fullscreen ─────── -->
+  <script>
+    (function () {
+      const MUTE_ICON   = '<svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>';
+      const UNMUTE_ICON = '<svg width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>';
+      const FS_ICON     = '<svg width="15" height="15" viewBox="0 0 24 24" fill="white"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>';
+
+      function fmt(s) {
+        if (!isFinite(s) || isNaN(s)) return '0:00';
+        return Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
+      }
+
+      const PLAY_SVG  = '<svg width="22" height="22" viewBox="0 0 24 24" fill="white" style="margin-left:3px"><polygon points="5,3 20,12 5,21"/></svg>';
+      const PAUSE_SVG = '<svg width="22" height="22" viewBox="0 0 24 24" fill="white"><rect x="5" y="3" width="4" height="18" rx="1"/><rect x="15" y="3" width="4" height="18" rx="1"/></svg>';
+
+      document.querySelectorAll('.experiment-video-wrapper').forEach(wrapper => {
+        const video = wrapper.querySelector('video');
+        if (!video) return;
+
+        // ── Mask ──
+        const mask = document.createElement('div');
+        mask.className = 'video-mask';
+        wrapper.appendChild(mask);
+
+        // ── Centered play/pause button ──
+        const playBtn = document.createElement('button');
+        playBtn.className = 'video-play-btn';
+        playBtn.setAttribute('aria-label', 'Play');
+        playBtn.innerHTML = '<span class="video-play-btn__circle">' + PLAY_SVG + '</span>';
+        wrapper.appendChild(playBtn);
+        playBtn.addEventListener('click', e => { e.stopPropagation(); video.paused ? video.play() : video.pause(); });
+
+        // ── Control bar ──
+        const ctrl = document.createElement('div');
+        ctrl.className = 'video-ctrl';
+
+        const track = document.createElement('div');
+        track.className = 'video-progress';
+        const fill = document.createElement('div');
+        fill.className = 'video-progress__fill';
+        fill.style.width = '0%';
+        track.appendChild(fill);
+
+        const row = document.createElement('div');
+        row.className = 'video-ctrl__row';
+        const timeEl = document.createElement('span');
+        timeEl.className = 'video-ctrl__time';
+        timeEl.textContent = '0:00 / 0:00';
+        const right = document.createElement('div');
+        right.className = 'video-ctrl__right';
+        const muteBtn = document.createElement('button');
+        muteBtn.className = 'video-mute-btn';
+        const fsBtn = document.createElement('button');
+        fsBtn.className = 'video-fs-btn';
+        fsBtn.setAttribute('aria-label', 'Fullscreen');
+        fsBtn.innerHTML = FS_ICON;
+
+        right.appendChild(muteBtn);
+        right.appendChild(fsBtn);
+        row.appendChild(timeEl);
+        row.appendChild(right);
+        ctrl.appendChild(track);
+        ctrl.appendChild(row);
+        wrapper.appendChild(ctrl);
+
+        // ── UI visibility (mask + ctrl) ──
+        let hideTimer = null;
+        function showUI() {
+          wrapper.classList.add('is-ui-visible');
+          clearTimeout(hideTimer);
+          if (!video.paused) {
+            hideTimer = setTimeout(() => wrapper.classList.remove('is-ui-visible'), 3000);
+          }
+        }
+        wrapper.addEventListener('mousemove', showUI);
+        wrapper.addEventListener('mouseleave', () => {
+          clearTimeout(hideTimer);
+          if (!video.paused) wrapper.classList.remove('is-ui-visible');
+        });
+
+        // ── Click anywhere on video (not on ctrl) → toggle play/pause ──
+        wrapper.addEventListener('click', e => {
+          if (e.target.closest('.video-ctrl')) return;
+          video.paused ? video.play() : video.pause();
+        });
+
+        // ── Sync mute button ──
+        function syncMute() {
+          muteBtn.innerHTML = video.muted
+            ? UNMUTE_ICON + ' Unmute'
+            : MUTE_ICON   + ' Mute';
+        }
+
+        // ── Sync play state ──
+        function sync() {
+          const playing = !video.paused && !video.ended;
+          wrapper.classList.toggle('is-playing', playing);
+          playBtn.querySelector('.video-play-btn__circle').innerHTML = playing ? PAUSE_SVG : PLAY_SVG;
+          playBtn.setAttribute('aria-label', playing ? 'Pause' : 'Play');
+          if (playing) showUI();
+          else clearTimeout(hideTimer);
+          syncMute();
+        }
+
+        // ── Progress ──
+        function updateProgress() {
+          const pct = video.duration ? (video.currentTime / video.duration) * 100 : 0;
+          fill.style.width = pct + '%';
+          timeEl.textContent = fmt(video.currentTime) + ' / ' + fmt(video.duration);
+        }
+
+        // ── Seek ──
+        let seeking = false;
+        let seekPct = null;
+        let seekRaf = null;
+        function flushSeek() {
+          seekRaf = null;
+          if (seekPct !== null && video.duration) {
+            video.currentTime = seekPct * video.duration;
+            seekPct = null;
+          }
+        }
+        function seek(e) {
+          const rect = track.getBoundingClientRect();
+          seekPct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+          fill.style.width = (seekPct * 100) + '%';
+          if (!seekRaf) seekRaf = requestAnimationFrame(flushSeek);
+        }
+        track.addEventListener('mousedown', e => { seeking = true; seek(e); e.preventDefault(); });
+        document.addEventListener('mousemove', e => { if (seeking) seek(e); });
+        document.addEventListener('mouseup', () => { seeking = false; });
+
+        // ── Mute ──
+        muteBtn.addEventListener('click', () => { video.muted = !video.muted; });
+
+        // ── Fullscreen ──
+        fsBtn.addEventListener('click', () => {
+          if (document.fullscreenElement) document.exitFullscreen();
+          else wrapper.requestFullscreen().catch(() => video.requestFullscreen());
+        });
+
+        // ── Events ──
+        video.addEventListener('play', sync);
+        video.addEventListener('pause', sync);
+        video.addEventListener('ended', sync);
+        video.addEventListener('volumechange', syncMute);
+        video.addEventListener('timeupdate', updateProgress);
+        video.addEventListener('loadedmetadata', () => { updateProgress(); syncMute(); });
+      });
+    })();
+  </script>
+
+</body>
+
+</html>
