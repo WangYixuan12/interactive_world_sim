@@ -1,0 +1,109 @@
+defaults:
+  - base_pytorch_algo
+
+# training hyperparameters
+weight_decay: 1e-4
+warmup_steps: 10000
+lr_scheduler: linear
+optimizer_beta: [0.9, 0.999]
+latent_dim: 512
+action_dim: 10
+enc_dim: 64
+num_components: 1
+obs_keys: ${dataset.obs_keys}
+x_shape:
+  - ${eval:'3 * len(${dataset.obs_keys})'}
+  - ${dataset.resolution}
+  - ${dataset.resolution}
+norm_scale: 6.0
+num_latent_downsample: 2
+num_views: ${eval:'len(${dataset.obs_keys})'}
+num_latent_channel: ${eval:'4 * ${algorithm.num_views}'}
+latent_resolution: ${eval:'${dataset.resolution} // int(2 ** ${algorithm.num_latent_downsample})'}
+training_stage: 1
+load_ae: ${eval:'None'}
+dtype: ${torch:float}
+mask_prev_action: False
+
+device: cuda
+noise_level: log_normal
+val_render: True
+
+# diffusion-related
+scheduling_matrix: autoregressive
+uncertainty_scale: 1.0
+guidance_scale: 1.0
+n_frames: ${dataset.horizon}
+dyn_infer_steps: 1
+dec_infer_steps: 3
+last_frame_loss_only: False
+prev_frame_noise_scale: 0.1
+robust_latent: False
+
+delta: ${eval:'0.00054 * ${algorithm.num_latent_channel} * ${algorithm.latent_resolution} * ${algorithm.latent_resolution}'}
+
+sampling_strategy: uniform
+sampling_strategy_params: []
+
+dynamics:
+  _target_: interactive_world_sim.algorithms.latent_dynamics.models.cm_latent_dynamics.CMLatentDynamics
+  action_dim: ${algorithm.action_dim}
+  latent_dim: ${algorithm.num_latent_channel}
+  dim: 64
+  action_emb_dim: 512
+  resnet_block_groups: 8
+  dim_mults: [1, 2]
+  attn_dim_head: 128
+  attn_heads: 4
+  use_linear_attn: True
+  use_init_temporal_attn: True
+  init_kernel_size: 5
+  is_causal: True
+  time_emb_type: rotary
+  dtype: ${algorithm.dtype}
+
+noise_scheduler:
+  _target_: interactive_world_sim.utils.cm_utils.DDPMScheduler
+  x_shape: ${algorithm.x_shape}
+  timesteps: ${algorithm.diffusion.timesteps}
+  sampling_timesteps: ${algorithm.diffusion.sampling_timesteps}
+  beta_schedule: ${algorithm.diffusion.beta_schedule}
+  schedule_fn_kwargs: ${algorithm.diffusion.schedule_fn_kwargs}
+  objective: ${algorithm.diffusion.objective}
+  loss_weighting: fused_snr
+  snr_clip: ${algorithm.diffusion.snr_clip}
+  cum_snr_decay: ${algorithm.diffusion.cum_snr_decay}
+  ddim_sampling_eta: ${algorithm.diffusion.ddim_sampling_eta}
+  clip_noise: ${algorithm.diffusion.clip_noise}
+  stabilization_level: ${algorithm.diffusion.stabilization_level}
+  dtype: ${algorithm.dtype}
+
+diffusion:
+  # training
+  beta_schedule: sigmoid
+  objective: pred_v
+  use_fused_snr: True
+  cum_snr_decay: 0.96
+  clip_noise: 6.
+  schedule_fn_kwargs: {}
+  # sampling
+  timesteps: 1000 # ddpm
+  sampling_timesteps: 50 # ddim
+  ddim_sampling_eta: 0.0
+  snr_clip: 5.0
+  model_channels: ${algorithm.enc_dim}
+  num_latent_downsample: ${algorithm.num_latent_downsample}
+  num_latent_channel: ${algorithm.num_latent_channel}
+  num_res_blocks: 2
+  attention_resolutions: [2, 4, 8]
+  dropout: 0.1
+  channel_mult: [1, 2, 3]
+  num_head_channels: 64
+  resblock_updown: True
+  use_scale_shift_norm: True
+  num_components: ${algorithm.num_components}
+  image_size: ${dataset.resolution}
+  stabilization_level: 15
+
+metrics:
+  - fvd

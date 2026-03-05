@@ -1,0 +1,40 @@
+name: iws
+channels:
+  - pytorch
+  # - pytorch3d
+  - nvidia
+  - conda-forge
+  - xformers
+dependencies:
+  - python=3.11
+  - pip=24.2
+  - uv
+  - cuda-toolkit=12.6.0
+  - cuda-nvcc=12.6
+  - cuda=12.6.0
+  - cuda-tools=12.6.0
+  - cuda-version=12.6
+  - cuda-command-line-tools=12.6.0
+  - cuda-compiler=12.6.0
+  - cuda-runtime=12.6.0
+  - gxx=12.1.0
+  - numba==0.59.0
+  - ipykernel=6.16
+  - zarr=2.12.0
+  - numcodecs=0.11.0
+  - h5py=3.7.0
+  - hydra-core=1.3.2
+  - einops=0.8.0
+  - omegaconf=2.3.0
+  # - imagecodecs==2022.8.8
+  - colorama=0.4.6
+  - tqdm=4.66.6
+  - click=8.1.7
+  - moviepy=1.0.3
+  - imageio=2.36.1
+  - imageio-ffmpeg=0.4.7
+  # - xformers=0.0.27
+  # for dreamerv3 torch
+  - mesalib=25.0.5
+  - cmake=4.1.0
+  - ffmpeg<8

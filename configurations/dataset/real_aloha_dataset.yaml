@@ -1,0 +1,43 @@
+defaults:
+  - base_dataset
+
+dataset_dir: data/sim_aloha/transfer_cube_0301
+horizon: 16
+val_horizon: 16
+aug_mode: none
+n_frames: ${dataset.horizon}
+observation_shape: [3, "${dataset.resolution}", "${dataset.resolution}"]
+context_length: 2
+frame_skip: ${dataset.skip_frame}
+skip_frame: 1
+pad_after: 7
+pad_before: 1
+rotation_rep: rotation_6d
+seed: 42
+val_ratio: 0.1
+skip_idx: 1
+use_cache: true
+resolution: 128
+obs_keys: [camera_0_color, camera_1_color]
+low_dim_keys: []
+delta_action: false
+goal_sample: intermediate
+action_mode: bimanual_push
+load_mask: false
+shape_meta:
+  action:
+    shape:
+    - 4
+  obs:
+    camera_0_color:
+      shape:
+      - 3 # C
+      - 128 # H
+      - 128 # W
+      type: rgb
+    camera_1_color:
+      shape:
+      - 3 # C
+      - 128 # H
+      - 128 # W
+      type: rgb

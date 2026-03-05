@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "interactive_world_sim"
+version = "0.1.0"
+description = "Interactive World Simulator for robot manipulation"
+requires-python = ">=3.10"
+license = {text = "MIT"}
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["interactive_world_sim*"]
+
+[tool.ruff.lint]
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+# Enable pycodestyle (`E`), Pyflakes (`F`), and import sorting (`I`)
+select = [
+    "E",      # https://docs.astral.sh/ruff/rules/#error-e
+    "W",      # https://docs.astral.sh/ruff/rules/#warning-w
+    "F",      # https://docs.astral.sh/ruff/rules/#pyflakes-f
+    "I",      # https://docs.astral.sh/ruff/rules/#isort-i
+    "B",      # https://docs.astral.sh/ruff/rules/#flake8-bugbear-b
+    "D101",
+    "D102",
+    "D2",
+    "D3",
+    "D402",
+    "D404",
+    "D417",
+    "D419",   # https://docs.astral.sh/ruff/rules/#pydocstyle-d
+    "SLF001", # https://docs.astral.sh/ruff/rules/#flake8-self-slf
+    "RET501",
+    "RET502",
+    "RET503", # https://docs.astral.sh/ruff/rules/#flake8-return-ret
+    "RUF",    # https://docs.astral.sh/ruff/rules/#ruff-specific-rules-ruf
+    "PLC",
+    "PLE",
+    "PLW",    # https://docs.astral.sh/ruff/rules/#pylint-pl
+    "PIE",    # https://docs.astral.sh/ruff/rules/#flake8-pie-pie
+    "FLY",    # https://docs.astral.sh/ruff/rules/#flynt-fly
+]
+
+ignore = [
+    "D203",    # Incompatible with D211
+    "D213",    # Incompatible with D212
+    "E731",    # We think this one is silly (sorry PEP8)
+    "PLC0105", # I don't even understand this one
+    "PLW0603", # We're allowing `global` statements to update variables
+    "PLW2901", # We're allowing a for loop variable to be overwritten
+    "RUF010",  # We don't like forcing people to `f"{write!s} {this!r}"`
+    "B035",    # Removed in later versions of ruff
+    "RUF012",  # This enforces using type.ClassVar for mutable defaults on classes
+]

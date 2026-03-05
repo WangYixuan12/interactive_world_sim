@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>World Model Demo</title>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      overflow: hidden;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    #container {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #view {
+      width: min(90vw, 90vh);
+      height: min(90vw, 90vh);
+      border-radius: 8px;
+      box-shadow: 0 0 50px rgba(255, 255, 255, 0.1);
+      transition: transform 0.1s ease-out;
+      image-rendering: pixelated;
+    }
+
+    #ui-layer {
+      position: absolute;
+      bottom: 40px;
+      left: 40px;
+      color: rgba(255, 255, 255, 0.55);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    #task-panel{
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      background: rgba(0,0,0,0.55);
+      color: rgba(255,255,255,0.85);
+      padding: 8px 10px;
+      border-radius: 8px;
+      font-size: 12px;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      user-select: none;
+    }
+
+    #task-panel select, #task-panel button{
+      background: rgba(0,0,0,1.0);
+      color: rgba(255,255,255,0.9);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 6px;
+      padding: 4px 6px;
+      font-family: inherit;
+      font-size: 12px;
+      outline: none;
+    }
+
+    #task-panel button{ cursor: pointer; }
+
+    h1 {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin: 0;
+    }
+
+    p {
+      font-size: 10px;
+      margin-top: 6px;
+      margin-bottom: 0;
+      line-height: 1.4;
+    }
+
+    #status {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: red;
+      box-shadow: 0 0 10px red;
+    }
+
+    /* Explicit banner */
+    #conn-banner {
+      position: absolute;
+      top: 18px;
+      right: 40px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: rgba(0,0,0,0.55);
+      color: rgba(255,255,255,0.85);
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      user-select: none;
+    }
+
+    #spinner {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid rgba(255,255,255,0.25);
+      border-top-color: rgba(255,255,255,0.85);
+      animation: spin 0.9s linear infinite;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<div id="container">
+  <canvas id="view" width="512" height="512"></canvas>
+
+  <div id="ui-layer">
+    <h1>World Model Demo</h1>
+    <p>WASD / IJKL: MOVE</p>
+    <p>LATENCY: <span id="latency">0</span>ms</p>
+  </div>
+
+  <div id="task-panel">
+    <label for="taskSelect">TASK</label>
+    <select id="taskSelect">
+      <option value="pusht" selected>PushT</option>
+      <option value="bimanual_rope_cam_0">Bimanual Rope Routing</option>
+      <option value="single_grasp_cam_0">Mug Grasping</option>
+      <option value="bimanual_sweep_cam_0">Bimanual Sweeping</option>
+    </select>
+  </div>
+
+  <div id="status" title="connection status"></div>
+
+  <div id="conn-banner">
+    <div id="spinner"></div>
+    <div id="conn-text">Connecting to server…</div>
+  </div>
+</div>
+
+<script>
+  function setTaskSplashUI(taskId) {
+    const cfg = TASK_UI[taskId] || TASK_UI.pusht;
+
+    splashTitle = cfg.title;
+    // keep subtitle stateful based on connection:
+    // if connected but no frame yet => “Connected! …”
+    // otherwise “Connecting …”
+    if (ws.readyState === WebSocket.OPEN && !hasReceivedFrame) {
+      splashSubtitle = "Connected! Press keys to start";
+    } else {
+      splashSubtitle = "Connecting to server…";
+    }
+    splashHint = cfg.hint;
+
+    // swap image
+    initImgLoaded = false;
+    initImg.onload = () => {
+      initImgLoaded = true;
+      if (!hasReceivedFrame) drawSplash();
+    };
+    initImg.onerror = () => {
+      initImgLoaded = false;
+      if (!hasReceivedFrame) drawSplash();
+    };
+    initImg.src = cfg.initImage;
+
+    if (!hasReceivedFrame) drawSplash();
+  }
+  const TASK_UI = {
+    pusht: {
+      initImage: "real_pusht_topdown/init.png",
+      title: "PUSHT (TOPDOWN)",
+      hint: "WASD: move left XY | IJKL: move right XY | Press keys to start",
+    },
+    bimanual_rope_cam_0: {
+      initImage: "real_bimanual_rope_cam0/init.png",
+      title: "BIMANUAL ROPE (THIRD-PERSON)",
+      hint: [
+        "WASD: move left XY | QE: move left Z",
+        "IJKL: move right XY | UO: move right Z | Press keys to start"],
+    },
+    single_grasp_cam_0: {
+      initImage: "real_single_grasp_cam0/init.png",
+      title: "MUG GRASPING (THIRD-PERSON)",
+      hint: [
+        "WASD: move left XY | IK: move left Z",
+        "JL: gripper open / close | Press keys to start"],
+    },
+    bimanual_sweep_cam_0: {
+      initImage: "real_bimanual_sweep_cam0/init.png",
+      title: "BIMANUAL SWEEPING (THIRD-PERSON)",
+      hint: "WASD: move left XY | IJKL: move right XY | Press keys to start",
+    },
+  };
+
+  const canvas = document.getElementById('view');
+  const ctx = canvas.getContext('2d');
+
+  const status = document.getElementById('status');
+  const latencyDisp = document.getElementById('latency');
+
+  const taskSelect = document.getElementById("taskSelect");
+
+  // Adjust this to your backend URL (UNCHANGED)
+  const ws = new WebSocket('ws://localhost:8000/ws');
+
+  <!-- const ws = new WebSocket('wss://wangyixuan0720--diffusion-forcing-demo-web.modal.run/ws'); -->
+
+  const banner = document.getElementById('conn-banner');
+  const connText = document.getElementById('conn-text');
+  const spinner = document.getElementById('spinner');
+
+  // ===== Splash image config =====
+  const initImg = new Image();
+
+  let initImgLoaded = false;
+  let hasReceivedFrame = false;
+
+  // We will update these texts based on connection state.
+  let splashTitle = "WORLD MODEL DEMO";
+  let splashSubtitle = "Connecting to server…";
+  let splashHint = "Tip: once connected, press any keys to start";
+
+  // define drawSplash(), initImg.onload/onerror, etc...
+
+  // ✅ NOW it's safe to apply the task UI (sets initImg.src and triggers splash redraw)
+  setTaskSplashUI(taskSelect.value);
+
+  // Draw initial splash immediately (even before image loads)
+  drawSplash();
+
+  function drawSplash() {
+    // background gradient
+    const g = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    g.addColorStop(0, "#0b0b12");
+    g.addColorStop(1, "#111122");
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // draw your provided init image (center-fit) if available
+    if (initImgLoaded) {
+      const cw = canvas.width, ch = canvas.height;
+      const iw = initImg.naturalWidth || 1;
+      const ih = initImg.naturalHeight || 1;
+      const scale = Math.min(cw / iw, ch / ih);
+      const dw = Math.floor(iw * scale);
+      const dh = Math.floor(ih * scale);
+      const dx = Math.floor((cw - dw) / 2);
+      const dy = Math.floor((ch - dh) / 2);
+
+      ctx.save();
+      ctx.globalAlpha = 0.95;
+      ctx.drawImage(initImg, dx, dy, dw, dh);
+      ctx.restore();
+
+      // subtle dark overlay for readability
+      ctx.save();
+      ctx.globalAlpha = 0.22;
+      ctx.fillStyle = "#000";
+      ctx.fillRect(0, 0, cw, ch);
+      ctx.restore();
+    } else {
+      // fallback subtle grid if image isn't loaded
+      ctx.save();
+      ctx.globalAlpha = 0.10;
+      ctx.strokeStyle = "#ffffff";
+      ctx.lineWidth = 1;
+      const step = 32;
+      for (let x = 0; x <= canvas.width; x += step) {
+        ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
+      }
+      for (let y = 0; y <= canvas.height; y += step) {
+        ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(canvas.width, y); ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    // text panel
+    ctx.save();
+    ctx.fillStyle = "rgba(0,0,0,0.45)";
+    ctx.fillRect(18, 18, canvas.width - 36, 110);
+    ctx.restore();
+
+    ctx.fillStyle = "rgba(255,255,255,0.92)";
+    ctx.font = "18px 'Courier New', Courier, monospace";
+    ctx.fillText(splashTitle, 30, 46);
+
+    ctx.fillStyle = "rgba(255,255,255,0.70)";
+    ctx.font = "12px 'Courier New', Courier, monospace";
+    ctx.fillText(splashSubtitle, 30, 70);
+
+    ctx.fillStyle = "rgba(255,255,255,0.55)";
+    ctx.font = "12px 'Courier New', Courier, monospace";
+    const hintLines = Array.isArray(splashHint) ? splashHint : [splashHint];
+    hintLines.forEach((line, idx) => {
+      ctx.fillText(line, 30, 92 + idx * 16); // 16px line spacing
+    });
+  }
+
+  function setSplashConnecting() {
+    splashSubtitle = "Connecting to server…";
+    splashHint = "Tip: once connected, press any keys to start";
+    drawSplash();
+  }
+
+  function setSplashConnected() {
+    splashSubtitle = "Connected! Press keys to start";
+    splashHint = "Hold keys (WASD/IJKL) to keep sending commands";
+    drawSplash();
+  }
+
+  function setSplashError(msg) {
+    splashSubtitle = msg;
+    splashHint = "Try refreshing the page";
+    drawSplash();
+  }
+
+  initImg.onload = () => {
+    initImgLoaded = true;
+    if (!hasReceivedFrame) drawSplash();
+  };
+  initImg.onerror = () => {
+    initImgLoaded = false;
+    if (!hasReceivedFrame) drawSplash();
+  };
+
+  // Draw initial splash immediately (even before image loads)
+  drawSplash();
+
+  ws.binaryType = 'arraybuffer';
+
+  let lastSendTimeMs = 0;
+
+  function sendControl(msg){
+    if (ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify(msg));
+  }
+  function setStatusDot(color) {
+    status.style.background = color;
+    status.style.boxShadow = `0 0 10px ${color}`;
+  }
+
+  function showConnectingBanner(text) {
+    connText.textContent = text;
+    banner.classList.remove("hidden");
+    spinner.style.display = "block";
+  }
+
+  function hideBanner() {
+    banner.classList.add("hidden");
+  }
+
+  function showBannerError(text) {
+    connText.textContent = text;
+    banner.classList.remove("hidden");
+    spinner.style.display = "none";
+  }
+
+  // initial UI state
+  setStatusDot("#b00");
+  showConnectingBanner("Connecting to server…");
+  setSplashConnecting();
+
+  ws.onopen = () => {
+    console.log('Connected');
+    setStatusDot("#0f0");
+    hideBanner();
+
+    // Optionally send an init message (UNCHANGED)
+    if (!hasReceivedFrame) setSplashConnected();
+
+    // keep your init message behavior
+    sendControl({ type: "init", task: taskSelect.value });
+  };
+
+  ws.onmessage = async (event) => {
+    hasReceivedFrame = true;
+
+    if (lastSendTimeMs > 0) {
+      const latency = Date.now() - lastSendTimeMs;
+      latencyDisp.innerText = String(latency);
+    }
+
+    const blob = new Blob([event.data], { type: 'image/jpeg' });
+    const bitmap = await createImageBitmap(blob);
+    ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  };
+
+  taskSelect.addEventListener("change", () => {
+    // update splash immediately
+    hasReceivedFrame = false;         // optional: show splash while new task loads
+    setTaskSplashUI(taskSelect.value);
+
+    // tell backend to switch
+    sendControl({ type: "set_task", task: taskSelect.value });
+    lastSentActionJson = null;
+  });
+  ws.onerror = (e) => {
+    console.error("WebSocket error:", e);
+    setStatusDot("#f80");
+    showBannerError("Connection error. Please refresh.");
+    if (!hasReceivedFrame) setSplashError("Connection error.");
+  };
+
+  ws.onclose = () => {
+    console.log('Disconnected from server');
+    setStatusDot("#b00");
+    showBannerError("Disconnected. Refresh to reconnect.");
+    if (!hasReceivedFrame) setSplashError("Disconnected.");
+  };
+
+  // ===== Input loop (keep your logic the same) =====
+  const keyState = {
+    KeyW: false,
+    KeyA: false,
+    KeyS: false,
+    KeyD: false,
+    KeyQ: false,
+    KeyE: false,
+    KeyI: false,
+    KeyJ: false,
+    KeyK: false,
+    KeyL: false,
+    KeyU: false,
+    KeyO: false,
+  };
+
+  window.addEventListener('keydown', (e) => {
+    if (e.code in keyState) {
+      e.preventDefault();
+      keyState[e.code] = true;
+    }
+  });
+
+  window.addEventListener('keyup', (e) => {
+    if (e.code in keyState) {
+      e.preventDefault();
+      keyState[e.code] = false;
+    }
+  });
+
+  function buildActionPayload() {
+    const w = keyState.KeyW ? 1 : 0;
+    const s = keyState.KeyS ? 1 : 0;
+    const a = keyState.KeyA ? 1 : 0;
+    const d = keyState.KeyD ? 1 : 0;
+    const q = keyState.KeyQ ? 1 : 0;
+    const e = keyState.KeyE ? 1 : 0;
+    const i = keyState.KeyI ? 1 : 0;
+    const k = keyState.KeyK ? 1 : 0;
+    const j = keyState.KeyJ ? 1 : 0;
+    const l = keyState.KeyL ? 1 : 0;
+    const u = keyState.KeyU ? 1 : 0;
+    const o = keyState.KeyO ? 1 : 0;
+
+    return {
+      w: w,
+      s: s,
+      a: a,
+      d: d,
+      q: q,
+      e: e,
+      i: i,
+      k: k,
+      j: j,
+      l: l,
+      u: u,
+      o: o,
+    };
+  }
+
+  let lastSentActionJson = null;
+  const TICK_MS = 1; // 20 Hz (UNCHANGED)
+
+  setInterval(() => {
+    if (ws.readyState !== WebSocket.OPEN) return;
+
+    const action = buildActionPayload();
+    const msg = {
+      type: 'action',
+      action,
+      t_client: performance.now(),
+    };
+
+    const json = JSON.stringify(msg);
+    if (json !== lastSentActionJson) {
+      lastSendTimeMs = Date.now();
+      ws.send(json);
+      lastSentActionJson = json;
+    }
+  }, TICK_MS);
+</script>
+
+</body>
+</html>

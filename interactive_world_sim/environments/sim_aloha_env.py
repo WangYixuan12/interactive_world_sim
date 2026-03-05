@@ -1,0 +1,219 @@
+from typing import Any
+
+import cv2
+import numpy as np
+import torch
+import transforms3d
+from dm_control import mujoco
+from gym_aloha.constants import (
+    convert_puppet_from_joint_to_position,
+)
+from gym_aloha.env import AlohaEnv
+from yixuan_utilities.draw_utils import center_crop
+from yixuan_utilities.hdf5_utils import load_dict_from_hdf5
+from yixuan_utilities.kinematics_helper import KinHelper
+
+from interactive_world_sim.utils.pose_utils import (
+    matrix_to_rotation_6d,
+    rotation_6d_to_matrix,
+)
+
+from .base_env import BaseEnv
+
+
+def pos_quat_to_mat(pose_in_pos_quat: np.ndarray) -> np.ndarray:
+    pos = pose_in_pos_quat[:3]
+    quat = pose_in_pos_quat[3:]
+    mat = np.eye(4)
+    mat[:3, :3] = transforms3d.quaternions.quat2mat(quat)
+    mat[:3, 3] = pos
+    return mat
+
+
+def mat_to_rot_6d(mat: np.ndarray) -> np.ndarray:
+    """Convert rotation matrix to 6D rotation representation."""
+    assert mat.shape == (4, 4), f"Invalid matrix shape: {mat.shape}"
+    rot_mat = mat[:3, :3]
+    rot_6d = matrix_to_rotation_6d(torch.from_numpy(rot_mat).unsqueeze(0))
+    pos = mat[:3, 3]
+    return np.concatenate([pos, rot_6d.squeeze().numpy()])
+
+
+def rot_6d_to_mat(rot_6d: np.ndarray) -> np.ndarray:
+    """Convert 6D rotation representation to rotation matrix."""
+    assert rot_6d.shape == (9,), f"Invalid rot_6d shape: {rot_6d.shape}"
+    pos = rot_6d[:3]
+    rot_6d = rot_6d[3:]
+    rot_mat = rotation_6d_to_matrix(torch.from_numpy(rot_6d).unsqueeze(0))
+    rot_mat = rot_mat.squeeze().numpy()
+    mat = np.eye(4)
+    mat[:3, :3] = rot_mat
+    mat[:3, 3] = pos
+    return mat
+
+
+class SimAlohaEnv(BaseEnv):
+    """Base class for all environments."""
+
+    def __init__(
+        self, task: str = "transfer_cube", render_size: tuple[int, int] = (128, 128)
+    ):
+        self.env = AlohaEnv(task=task)
+        self.kin_helper = KinHelper(robot_name="trossen_vx300s")
+        self.render_size = render_size
+
+    def step(self, action: np.ndarray) -> tuple:
+        """Run one timestep of the environment's dynamics."""
+        # compute EEF pose in each base frame
+        left_base_t_left_action_6d = action[:9]
+        left_gripper = action[9:10]
+        left_base_t_right_action_6d = action[10:19]
+        right_gripper = action[19:20]
+        left_base_t_left_action_mat = rot_6d_to_mat(left_base_t_left_action_6d)
+        left_base_t_right_action_mat = rot_6d_to_mat(left_base_t_right_action_6d)
+        obs = self.env._env.task.get_observation(self.env._env.physics)  # noqa
+        world_t_left_base = pos_quat_to_mat(obs["left_base"])
+        world_t_right_base = pos_quat_to_mat(obs["right_base"])
+        right_base_t_left_base = np.linalg.inv(world_t_right_base) @ world_t_left_base
+        right_base_t_right_action_mat = (
+            right_base_t_left_base @ left_base_t_right_action_mat
+        )
+
+        # solve IK
+        left_init_qpos = obs["qpos"][:7]
+        left_init_qpos = np.concatenate([left_init_qpos, left_init_qpos[6:7]])
+        right_init_qpos = obs["qpos"][7:14]
+        right_init_qpos = np.concatenate([right_init_qpos, right_init_qpos[6:7]])
+        left_joints = self.kin_helper.compute_ik_from_mat(
+            left_init_qpos, left_base_t_left_action_mat
+        )
+        right_joints = self.kin_helper.compute_ik_from_mat(
+            right_init_qpos, right_base_t_right_action_mat
+        )
+        env_action = np.concatenate(
+            [left_joints[:6], left_gripper, right_joints[:6], right_gripper]
+        )
+
+        return self.env.step(env_action)
+
+    def render(self, mode: str = "human") -> dict:
+        """Render the environment."""
+        obs = self.env._env.task.get_observation(self.env._env.physics)  # noqa
+        if mode == "original":
+            return obs["images"]
+        elif mode == "human":
+            keys = list(obs["images"].keys())
+            img_obs = {}
+            for key in keys:
+                img = obs["images"][key]
+                img = center_crop(img, self.render_size)
+                img = cv2.resize(img, self.render_size, interpolation=cv2.INTER_AREA)
+                img_obs[key] = img
+            return img_obs
+        else:
+            raise ValueError(f"Unknown render mode: {mode}")
+
+    def compute_init_state(self, hdf5_file_path: str) -> np.ndarray:
+        """Compute the initial state of the environment from replay buffer."""
+        hdf5_data, file_handle = load_dict_from_hdf5(hdf5_file_path)
+        env_state = hdf5_data["env_state"][0]
+        joint_qpos = hdf5_data["obs"]["joint_pos"][0]
+        qpos = np.concatenate([joint_qpos, env_state])
+
+        left_arm = qpos[:6]
+        right_arm = qpos[7:13]
+        left_gripper_joint = qpos[6]
+        left_gripper_pos = convert_puppet_from_joint_to_position(left_gripper_joint)
+        left_gripper_qpos = np.array([left_gripper_pos, left_gripper_pos])
+        right_gripper_joint = qpos[13]
+        right_gripper_pos = convert_puppet_from_joint_to_position(right_gripper_joint)
+        right_gripper_qpos = np.array([right_gripper_pos, right_gripper_pos])
+        robot_qpos = np.concatenate(
+            [
+                left_arm,
+                left_gripper_qpos,
+                right_arm,
+                right_gripper_qpos,
+            ]
+        )
+        new_qpos = np.concatenate([robot_qpos, qpos[14:]])
+        file_handle.close()
+
+        return new_qpos
+
+    def reset(self, state: Any = None) -> None:
+        """Reset the environment and return the initial observation."""
+        if state is not None:
+            self.env._env.physics.data.qpos[:] = state  # noqa
+            self.env._env.physics.forward()  # noqa
+        else:
+            self.env.reset()
+
+    def get_state(self) -> np.ndarray:
+        """Return the current state of the environment."""
+        return self.env._env.physics.data.qpos.copy()  # noqa
+
+    def get_observations(self) -> dict:
+        """Get the current observation of the environment."""
+        return self.env._env.task.get_observation(self.env._env.physics)  # noqa
+
+    def get_render_size(self) -> tuple[int, int]:
+        """Return the render size of the environment."""
+        return self.render_size
+
+    def get_curr_pos(self) -> np.ndarray:
+        """Return the current position of the environment."""
+        obs = self.env._env.task.get_observation(self.env._env.physics)  # noqa
+
+        world_t_left_base = pos_quat_to_mat(obs["left_base"])
+        world_t_right_base = pos_quat_to_mat(obs["right_base"])
+        left_base_t_right_base = np.linalg.inv(world_t_left_base) @ world_t_right_base
+
+        # compute FK for obs
+        left_qpos = obs["qpos"][:7]
+        left_qpos = np.concatenate([left_qpos, left_qpos[6:7]])
+        right_qpos = obs["qpos"][7:]
+        right_qpos = np.concatenate([right_qpos, right_qpos[6:7]])
+        left_base_t_left_eef = self.kin_helper.compute_fk_from_link_idx(
+            left_qpos, [self.kin_helper.sapien_eef_idx]
+        )[0]
+        right_base_t_right_eef = self.kin_helper.compute_fk_from_link_idx(
+            right_qpos, [self.kin_helper.sapien_eef_idx]
+        )[0]
+        left_base_t_right_eef = left_base_t_right_base @ right_base_t_right_eef
+        left_eef = mat_to_rot_6d(left_base_t_left_eef)
+        right_eef = mat_to_rot_6d(left_base_t_right_eef)
+        left_gripper = left_qpos[6:7]
+        right_gripper = right_qpos[6:7]
+        curr_pos = np.concatenate([left_eef, left_gripper, right_eef, right_gripper])
+        return curr_pos
+
+    def get_cam_intrinsic(self, name: str, shape: tuple[int, int]) -> np.ndarray:
+        """Return the intrinsic matrix of the camera."""
+        cam = mujoco.Camera(self.env._env.physics, camera_id=name)  # noqa
+        cam.update()
+        # c_xy = cam.matrices().image
+        # cx = c_xy[0, 2]
+        # cy = c_xy[1, 2]
+        f_xy = cam.matrices().focal
+        fx = -f_xy[0, 0]
+        fy = f_xy[1, 1]
+        cx = shape[1] / 2
+        cy = shape[0] / 2
+        width = cam.width
+        height = cam.height
+        fx = fx * shape[1] / width
+        fy = fy * shape[0] / height
+        return np.array([cx, cy, fx, fy])
+
+    def get_cam_extrinsic(self, name: str) -> np.ndarray:
+        """Return the extrinsic matrix of the camera."""
+        cam = mujoco.Camera(self.env._env.physics, camera_id=name)  # noqa
+        cam.update()
+        rotation = cam.matrices().rotation
+        translation = cam.matrices().translation
+        translation[:3, 3] = -translation[:3, 3]
+        translation[:3, :3] = rotation[:3, :3].T
+        translation[:3, 1] = -translation[:3, 1]
+        translation[:3, 2] = -translation[:3, 2]
+        return translation

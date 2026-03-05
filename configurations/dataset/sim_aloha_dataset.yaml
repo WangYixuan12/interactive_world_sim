@@ -1,0 +1,29 @@
+defaults:
+  - base_dataset
+
+dataset_dir: data/sim_aloha/transfer_cube_0301
+horizon: 16
+val_horizon: 16
+aug_mode: none
+skip_frame: 1
+pad_after: 7
+pad_before: 1
+rotation_rep: rotation_6d
+seed: 42
+skip_idx: 4
+use_cache: true
+resolution: 128
+obs_keys: [top_pov]
+low_dim_keys: []
+goal_sample: intermediate
+shape_meta:
+  action:
+    shape:
+    - 4
+  obs:
+    top_pov:
+      shape:
+      - 3 # C
+      - 128 # H
+      - 128 # W
+      type: rgb
