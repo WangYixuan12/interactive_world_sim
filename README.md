@@ -267,6 +267,7 @@ My stage 3 training report is attached [here](https://api.wandb.ai/links/yixuan1
 - Order of stage 2 and stage 3 can be swapped.
 - Even after the validation metrics converge, you are suggested to wait for longer to achieve the best result.
 - Stage 2 training is most time-consuming. Stage 1 takes less time than stage 2 but more time than stage 3.
+- 6-hour data (~600 episodes with 200 steps each) is typically enough for world model training
 
 ## 📦 Real-World Data Collection on ALOHA
 
