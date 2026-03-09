@@ -1019,7 +1019,9 @@
           const tClient = new DataView(buf).getFloat64(0, false); // first 8 bytes, big-endian
           if (tClient > 0) latEl.textContent = String(Math.round(performance.now() - tClient));
           const bm = await createImageBitmap(new Blob([new Uint8Array(buf, 8)], { type: 'image/jpeg' }));
+          ctx.filter = 'brightness(1.3)';
           ctx.drawImage(bm, 0, 0, canvas.width, canvas.height);
+          ctx.filter = 'none';
           if (wasSwitching) setCanvas('live');
         };
 
