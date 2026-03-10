@@ -112,7 +112,8 @@ python scripts/download_data_hf.py \
 
 ### Teleoperate from Keyboard
 
-Prerequisite: download at least mini data and checkpoints.
+> **Requirements:** finish [Download Checkpoints](#download-ckpts) and [Download Data](#download-data) (mini dataset).
+> **Hardware:** the minimum requirement is a 2080 GPU for inference.
 
 Use the keyboard to teleoperate the robot through the world model (no physical robot required). Example for the PushT task:
 
