@@ -1,0 +1,3 @@
+[submodule "external/gym-aloha"]
+	path = external/gym-aloha
+	url = https://github.com/WangYixuan12/gym-aloha

@@ -313,6 +313,13 @@ Data is saved in HDF5 format and cached as a zarr dataset for fast loading durin
 
 Collect scripted demonstration data in MuJoCo simulation for the PushT task. A scripted policy automatically generates diverse motions (linear pushes, rotations, random contact, random exploration) and saves successful episodes.
 
+Install mujoco environment by running
+```bash
+git submodule update --init --recursive
+uv pip install -e external/gym-aloha/
+```
+
+Then generate data with specific motion type (`linear`, `rotating`, `random_contact`, `random_no_contact`)
 ```bash
 python scripts/data_collection/sim_aloha_dataset_collection_scripted.py \
     --output_dir data/mujoco/pusht/train \
