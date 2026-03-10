@@ -28,6 +28,7 @@ https://github.com/user-attachments/assets/78d04003-4b1e-4844-8115-3a2a05753723
     - [Stage 3: Autoencoder Finetuning](#stage-3-autoencoder-finetuning)
     - [Empirical tips for training:](#empirical-tips-for-training)
   - [📦 Real-World Data Collection on ALOHA](#-real-world-data-collection-on-aloha)
+  - [🤖 Sim Data Collection (MuJoCo)](#-sim-data-collection-mujoco)
   - [🌎 WM Data Collection on ALOHA](#-wm-data-collection-on-aloha)
   - [Acknowledgements](#acknowledgements)
 
@@ -91,13 +92,23 @@ bash scripts/download_mini_data.sh
 
 Downloads to `data/mini/{pusht,single_grasp,bimanual_sweep,bimanual_rope}/`. ([Hugging Face](https://huggingface.co/datasets/yixuan1999/interactive-world-sim-min-data))
 
-**Full training dataset**:
+**Full training dataset** (real ALOHA):
 
 ```bash
 bash scripts/download_full_data.sh
 ```
 
 Downloads to `data/full/{pusht,single_grasp,bimanual_sweep,bimanual_rope,bimanual_box,single_chain_in_box}/`. ([Hugging Face](https://huggingface.co/datasets/yixuan1999/interactive-world-sim-data))
+
+**MuJoCo simulation dataset** (PushT task, scripted policy):
+
+```bash
+python scripts/download_data_hf.py \
+    --repo yixuan1999/interactive-world-sim-mujoco-data \
+    --local_dir data/mujoco
+```
+
+([Hugging Face](https://huggingface.co/datasets/yixuan1999/interactive-world-sim-mujoco-data))
 
 ### Teleoperate from Keyboard
 
@@ -290,11 +301,25 @@ python -m interactive_world_sim.real_world.robot_sleep --left --right
 ```
 
 **Requirements:**
-- ALOHA robot hardware (see [`real_world/`](real_world/))
-- Intel RealSense cameras (configured in `real_world/aloha_extrinsics/`)
+- ALOHA robot hardware (see [`real_world/`](https://github.com/WangYixuan12/interactive_world_sim/tree/main/interactive_world_sim/real_world))
+- Intel RealSense cameras (configured in [`real_world/aloha_extrinsics/`](https://github.com/WangYixuan12/interactive_world_sim/tree/main/interactive_world_sim/real_world/aloha_extrinsics))
 
 Data is saved in HDF5 format and cached as a zarr dataset for fast loading during training.
 
+
+## 🤖 Sim Data Collection (MuJoCo)
+
+Collect scripted demonstration data in MuJoCo simulation for the PushT task. A scripted policy automatically generates diverse motions (linear pushes, rotations, random contact, random exploration) and saves successful episodes.
+
+```bash
+python scripts/data_collection/sim_aloha_dataset_collection_scripted.py \
+    --output_dir data/mujoco/pusht/train \
+    --motion_type random_no_contact
+```
+
+Use `--headless` to run without visualization. Episodes are auto-saved; only successful ones are kept based on a task-specific success function.
+
+The collected data is also available on [Hugging Face](https://huggingface.co/datasets/yixuan1999/interactive-world-sim-mujoco-data).
 
 ## 🌎 WM Data Collection on ALOHA
 
