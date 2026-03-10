@@ -8,6 +8,7 @@ channels:
 dependencies:
   - python=3.11
   - pip=24.2
+  - setuptools=80.10.1
   - uv
   - cuda-toolkit=12.6.0
   - cuda-nvcc=12.6
