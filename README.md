@@ -112,6 +112,8 @@ python scripts/download_data_hf.py \
 
 ### Teleoperate from Keyboard
 
+Prerequisite: download at least mini data and checkpoints.
+
 Use the keyboard to teleoperate the robot through the world model (no physical robot required). Example for the PushT task:
 
 ```bash
