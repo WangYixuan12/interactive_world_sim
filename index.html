@@ -60,6 +60,7 @@
       <a class="toc-item" data-id="data-generation" href="#data-generation">Policy Training</a>
       <a class="toc-item" data-id="correlation" href="#correlation">Policy Evaluation</a>
       <a class="toc-item" data-id="long-interaction" href="#long-interaction">10-Min Interaction</a>
+      <!-- <a class="toc-item" data-id="closed-source" href="#closed-source">Closed-Source</a> -->
     </nav>
   </div>
 
@@ -1157,6 +1158,271 @@
     })();
   </script>
 
+  <section class="section" id="closed-source">
+    <div class="container is-max-widescreen">
+      <h2 class="title is-3 has-text-centered">Supplementary Comparison with Closed-Source Models</h2>
+      <div style="max-width:960px;margin:0 auto 1.5rem;">
+        <div class="content has-text-justified">
+          <p>
+            We compare our world simulator with state-of-the-art closed-source video generation models on the same four robot manipulation tasks.
+            Each model receives the same initial frame; models that support text prompts are given the task description as the prompt.
+            Unlike our interactive world simulator, these models generate open-loop videos and do not support action-conditioned control.
+          </p>
+        </div>
+      </div>
+      <div style="max-width:960px;margin:0 auto;">
+
+        <!-- Genie -->
+        <h3 class="title is-4 has-text-centered" style="margin-bottom:1.25rem;">Genie</h3>
+        <div class="columns is-multiline">
+          <div class="column is-half">
+            <div class="box experiment-card has-text-centered">
+              <h3 class="title is-5">T Pushing</h3>
+              <div class="experiment-video-wrapper" style="margin-bottom:0">
+                <video class="experiment-video" loop="" muted="" playsinline="">
+                  <source src="media/videos/closed_source/genie/pusht_comp.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div class="box experiment-card has-text-centered">
+              <h3 class="title is-5">Rope Routing</h3>
+              <div class="experiment-video-wrapper" style="margin-bottom:0">
+                <video class="experiment-video" loop muted playsinline>
+                  <source src="media/videos/closed_source/genie/bimanual_rope_comp.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div class="box experiment-card has-text-centered">
+              <h3 class="title is-5">Mug Grasping</h3>
+              <div class="experiment-video-wrapper" style="margin-bottom:0">
+                <video class="experiment-video" loop muted playsinline>
+                  <source src="media/videos/closed_source/genie/single_grasp_comp.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div class="box experiment-card has-text-centered">
+              <h3 class="title is-5">Pile Sweeping</h3>
+              <div class="experiment-video-wrapper" style="margin-bottom:0">
+                <video class="experiment-video" loop muted playsinline>
+                  <source src="media/videos/closed_source/genie/bimanual_sweep_comp.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr style="margin:2rem 0;">
+
+        <!-- Grok -->
+        <h3 class="title is-4 has-text-centered" style="margin-bottom:1.25rem;">Grok</h3>
+        <div class="columns is-multiline">
+          <div class="column is-half">
+            <div class="box experiment-card has-text-centered">
+              <h3 class="title is-5">T Pushing</h3>
+              <p style="font-size:0.8rem;color:#888;margin-top:-0.5rem;margin-bottom:0.75rem;font-style:italic;">Prompt: "the robot pushes T to rotate"</p>
+              <div class="experiment-video-wrapper" style="margin-bottom:0">
+                <video class="experiment-video" loop muted playsinline>
+                  <source src="media/videos/closed_source/grok/pusht%20%5Bthe%20robot%20pushes%20T%20to%20rotate%5D.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div class="box experiment-card has-text-centered">
+              <h3 class="title is-5">Rope Routing</h3>
+              <p style="font-size:0.8rem;color:#888;margin-top:-0.5rem;margin-bottom:0.75rem;font-style:italic;">Prompt: "robot inserts the rope into two clips"</p>
+              <div class="experiment-video-wrapper" style="margin-bottom:0">
+                <video class="experiment-video" loop muted playsinline>
+                  <source src="media/videos/closed_source/grok/bimanual_rope%20%5Brobot%20inserts%20the%20rope%20into%20two%20clips%5D.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div class="box experiment-card has-text-centered">
+              <h3 class="title is-5">Mug Grasping</h3>
+              <p style="font-size:0.8rem;color:#888;margin-top:-0.5rem;margin-bottom:0.75rem;font-style:italic;">Prompt: "robot grasps the mug and places it on the plate"</p>
+              <div class="experiment-video-wrapper" style="margin-bottom:0">
+                <video class="experiment-video" loop muted playsinline>
+                  <source src="media/videos/closed_source/grok/single_grasp%20%5Brobot%20grasps%20the%20mug%20and%20places%20it%20on%20the%20plate%5D.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div class="box experiment-card has-text-centered">
+              <h3 class="title is-5">Pile Sweeping</h3>
+              <p style="font-size:0.8rem;color:#888;margin-top:-0.5rem;margin-bottom:0.75rem;font-style:italic;">Prompt: "robot sweeps cubes into the dustpan"</p>
+              <div class="experiment-video-wrapper" style="margin-bottom:0">
+                <video class="experiment-video" loop muted playsinline>
+                  <source src="media/videos/closed_source/grok/bimanual_sweep%20%5Brobot%20sweeps%20cubes%20into%20the%20dustpan%5D.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr style="margin:2rem 0;">
+
+        <!-- Seedance 2.0 -->
+        <h3 class="title is-4 has-text-centered" style="margin-bottom:1.25rem;">Seedance 2.0</h3>
+        <div class="columns is-multiline">
+          <div class="column is-half">
+            <div class="box experiment-card has-text-centered">
+              <h3 class="title is-5">T Pushing</h3>
+              <p style="font-size:0.8rem;color:#888;margin-top:-0.5rem;margin-bottom:0.75rem;font-style:italic;">Prompt: "the robot pushes T to rotate"</p>
+              <div class="experiment-video-wrapper" style="margin-bottom:0">
+                <video class="experiment-video" loop muted playsinline>
+                  <source src="media/videos/closed_source/seedance2/pusht.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div class="box experiment-card has-text-centered">
+              <h3 class="title is-5">Rope Routing</h3>
+              <p style="font-size:0.8rem;color:#888;margin-top:-0.5rem;margin-bottom:0.75rem;font-style:italic;">Prompt: "robot inserts the rope into two clips"</p>
+              <div class="experiment-video-wrapper" style="margin-bottom:0">
+                <video class="experiment-video" loop muted playsinline>
+                  <source src="media/videos/closed_source/seedance2/bimanual_rope.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div class="box experiment-card has-text-centered">
+              <h3 class="title is-5">Mug Grasping</h3>
+              <p style="font-size:0.8rem;color:#888;margin-top:-0.5rem;margin-bottom:0.75rem;font-style:italic;">Prompt: "robot grasps the mug and places it on the plate"</p>
+              <div class="experiment-video-wrapper" style="margin-bottom:0">
+                <video class="experiment-video" loop muted playsinline>
+                  <source src="media/videos/closed_source/seedance2/single_grasp.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div class="box experiment-card has-text-centered">
+              <h3 class="title is-5">Pile Sweeping</h3>
+              <p style="font-size:0.8rem;color:#888;margin-top:-0.5rem;margin-bottom:0.75rem;font-style:italic;">Prompt: "robot sweeps cubes into the dustpan"</p>
+              <div class="experiment-video-wrapper" style="margin-bottom:0">
+                <video class="experiment-video" loop muted playsinline>
+                  <source src="media/videos/closed_source/seedance2/bimanual_sweep.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr style="margin:2rem 0;">
+
+        <!-- Sora -->
+        <h3 class="title is-4 has-text-centered" style="margin-bottom:1.25rem;">Sora</h3>
+        <div class="columns is-multiline">
+          <div class="column is-half">
+            <div class="box experiment-card has-text-centered">
+              <h3 class="title is-5">T Pushing</h3>
+              <p style="font-size:0.8rem;color:#888;margin-top:-0.5rem;margin-bottom:0.75rem;font-style:italic;">Prompt: "the robot pushes T to rotate"</p>
+              <div class="experiment-video-wrapper" style="margin-bottom:0">
+                <video class="experiment-video" loop muted playsinline>
+                  <source src="media/videos/closed_source/sora/pusht%20%5Bthe%20robot%20pushes%20T%20to%20rotate%5D.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div class="box experiment-card has-text-centered">
+              <h3 class="title is-5">Rope Routing</h3>
+              <p style="font-size:0.8rem;color:#888;margin-top:-0.5rem;margin-bottom:0.75rem;font-style:italic;">Prompt: "robot inserts the rope into two clips"</p>
+              <div class="experiment-video-wrapper" style="margin-bottom:0">
+                <video class="experiment-video" loop muted playsinline>
+                  <source src="media/videos/closed_source/sora/bimanual_rope%20%5Brobot%20inserts%20the%20rope%20into%20two%20clips%5D.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div class="box experiment-card has-text-centered">
+              <h3 class="title is-5">Mug Grasping</h3>
+              <p style="font-size:0.8rem;color:#888;margin-top:-0.5rem;margin-bottom:0.75rem;font-style:italic;">Prompt: "robot grasps the mug and places it on the plate"</p>
+              <div class="experiment-video-wrapper" style="margin-bottom:0">
+                <video class="experiment-video" loop muted playsinline>
+                  <source src="media/videos/closed_source/sora/single_grasp%20%5Brobot%20grasps%20the%20mug%20and%20places%20it%20on%20the%20plate%5D.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div class="box experiment-card has-text-centered">
+              <h3 class="title is-5">Pile Sweeping</h3>
+              <p style="font-size:0.8rem;color:#888;margin-top:-0.5rem;margin-bottom:0.75rem;font-style:italic;">Prompt: "robot sweeps cubes into the dustpan"</p>
+              <div class="experiment-video-wrapper" style="margin-bottom:0">
+                <video class="experiment-video" loop muted playsinline>
+                  <source src="media/videos/closed_source/sora/bimanual_sweep%20%5Brobot%20sweeps%20cubes%20into%20the%20dustpan%5D.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr style="margin:2rem 0;">
+
+        <!-- WAN 2.6 -->
+        <h3 class="title is-4 has-text-centered" style="margin-bottom:1.25rem;">WAN 2.6</h3>
+        <div class="columns is-multiline">
+          <div class="column is-half">
+            <div class="box experiment-card has-text-centered" style="display:flex;align-items:center;justify-content:center;min-height:180px;">
+              <div>
+                <h3 class="title is-5" style="margin-bottom:0.5rem;">T Pushing</h3>
+                <p style="font-size:0.8rem;color:#888;margin-top:-0.5rem;margin-bottom:0.75rem;font-style:italic;">Prompt: "the robot pushes T to rotate"</p>
+                <div class="experiment-video-wrapper" style="margin-bottom:0">
+                  <video class="experiment-video" loop muted playsinline>
+                    <source src="media/videos/closed_source/wan/the%20robot%20pushes%20T%20to%20rotate.mp4" type="video/mp4" />
+                  </video>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div class="box experiment-card has-text-centered">
+              <h3 class="title is-5">Rope Routing</h3>
+              <p style="font-size:0.8rem;color:#888;margin-top:-0.5rem;margin-bottom:0.75rem;font-style:italic;">Prompt: "robot inserts the rope into two clips"</p>
+              <div class="experiment-video-wrapper" style="margin-bottom:0">
+                <video class="experiment-video" loop muted playsinline>
+                  <source src="media/videos/closed_source/wan/robot%20inserts%20the%20rope%20into%20two%20clips.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div class="box experiment-card has-text-centered">
+              <h3 class="title is-5">Mug Grasping</h3>
+              <p style="font-size:0.8rem;color:#888;margin-top:-0.5rem;margin-bottom:0.75rem;font-style:italic;">Prompt: "robot grasps the mug and places it on the plate"</p>
+              <div class="experiment-video-wrapper" style="margin-bottom:0">
+                <video class="experiment-video" loop muted playsinline>
+                  <source src="media/videos/closed_source/wan/robot%20grasps%20the%20mug%20and%20places%20it%20on%20the%20plate.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+          </div>
+          <div class="column is-half">
+            <div class="box experiment-card has-text-centered">
+              <h3 class="title is-5">Pile Sweeping</h3>
+              <p style="font-size:0.8rem;color:#888;margin-top:-0.5rem;margin-bottom:0.75rem;font-style:italic;">Prompt: "robot sweeps cubes into the dustpan"</p>
+              <div class="experiment-video-wrapper" style="margin-bottom:0">
+                <video class="experiment-video" loop muted playsinline>
+                  <source src="media/videos/closed_source/wan/robot%20sweeps%20cubes%20into%20the%20dustpan.mp4" type="video/mp4" />
+                </video>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /max-width wrapper -->
+    </div>
+  </section>
+
   <section class="section" id="acknowledgements">
     <div class="container is-max-widescreen">
       <h2 class="title is-3 has-text-centered">Acknowledgements</h2>
@@ -1177,7 +1443,7 @@
     (function () {
       const TOC_IDS = [
         'interactive-demo', 'abstract', 'walkthrough', 'experiments',
-        'data-generation', 'correlation', 'long-interaction', 'acknowledgements'
+        'data-generation', 'correlation', 'long-interaction',
       ];
 
       const tracker        = document.getElementById('section-tracker');
@@ -1229,7 +1495,14 @@
           const activeSection = firstSection;
           const heading = activeSection.querySelector('h2') || activeSection;
           const headingTop = heading.getBoundingClientRect().top;
-          tracker.style.top = Math.max(headingTop, STICKY_TOP) + 'px';
+          const tocTop = Math.max(headingTop, STICKY_TOP);
+          const tocBottom = tocTop + tracker.offsetHeight;
+          const lastSectionBottom = lastSection.getBoundingClientRect().bottom;
+          if (lastSectionBottom < tocBottom) {
+            tracker.style.top = (lastSectionBottom - tracker.offsetHeight) + 'px';
+          } else {
+            tracker.style.top = tocTop + 'px';
+          }
         }
 
         if (current && current.id !== currentId) {
