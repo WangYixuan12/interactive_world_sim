@@ -15,6 +15,7 @@ IWS_ROOT=/nfs-stor/youssef.ghallab/Robotics/continual_octo/interactive_world_sim
 LIBERO_ROOT="${LIBERO_ROOT:-/nfs-stor/youssef.ghallab/Robotics/libero_datasets/libero_100/libero_90}"
 OUTPUT_DIR="${OUTPUT_DIR:-/nfs-stor/youssef.ghallab/Robotics/continual_octo/outputs/real_libero90/stage1}"
 RESUME_CKPT="${RESUME_CKPT:-}"
+WANDB_ENTITY="${WANDB_ENTITY:-youssef-ghallab-mbzuai}"
 
 shopt -s nullglob
 files=("$LIBERO_ROOT"/*.hdf5)
@@ -47,13 +48,10 @@ command=(
   algorithm.training_stage=1
   "hydra.run.dir=$OUTPUT_DIR"
   "wandb.mode=${WANDB_MODE:-online}"
+  "wandb.entity=$WANDB_ENTITY"
 )
 
 if [[ -n "$RESUME_CKPT" && -e "$RESUME_CKPT" ]]; then
   command+=("load=$RESUME_CKPT")
 fi
-if [[ -n "${WANDB_ENTITY:-}" ]]; then
-  command+=("wandb.entity=$WANDB_ENTITY")
-fi
-
 "${command[@]}"
