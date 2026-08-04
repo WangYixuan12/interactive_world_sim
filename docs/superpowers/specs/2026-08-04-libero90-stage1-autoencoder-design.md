@@ -53,7 +53,9 @@ Add one CIAI batch launcher. Its training command will follow the README Stage
 - batch size 1;
 - 1,000,005 target optimizer steps;
 - log every 100 steps;
-- validate every 6,000 steps with batch size 10;
+- validate every 6,000 steps with one batch of 10 samples, using integer
+  `limit_batch=1` so Lightning does not interpret `1.0` as the complete
+  67,114-frame validation split and retain it in host memory;
 - save a resumable checkpoint every 5,000 steps so validation failures at
   step 6,000 do not erase the entire allocation's training progress;
 - use one GPU for a 48-hour total training budget, split into two resumable
