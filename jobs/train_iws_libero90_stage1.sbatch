@@ -17,6 +17,11 @@ OUTPUT_DIR="${OUTPUT_DIR:-/nfs-stor/youssef.ghallab/Robotics/continual_octo/outp
 RESUME_CKPT="${RESUME_CKPT:-}"
 WANDB_ENTITY="${WANDB_ENTITY:-youssef-ghallab-mbzuai}"
 
+if [[ -n "$RESUME_CKPT" && ! -f "$RESUME_CKPT" ]]; then
+  echo "RESUME_CKPT must be a regular file: $RESUME_CKPT" >&2
+  exit 1
+fi
+
 shopt -s nullglob
 files=("$LIBERO_ROOT"/*.hdf5)
 if (( ${#files[@]} != 90 )); then
@@ -44,6 +49,7 @@ command=(
   experiment.training.log_every_n_steps=100
   experiment.validation.limit_batch=1.0
   experiment.validation.batch_size=10
+  experiment.validation.data.num_workers=8
   experiment.validation.val_every_n_step=6000
   experiment.training.checkpointing.every_n_train_steps=10000
   algorithm.latent_dim=512 algorithm.action_dim=7
@@ -53,7 +59,7 @@ command=(
   "wandb.entity=$WANDB_ENTITY"
 )
 
-if [[ -n "$RESUME_CKPT" && -e "$RESUME_CKPT" ]]; then
+if [[ -n "$RESUME_CKPT" ]]; then
   command+=("load=$RESUME_CKPT")
 fi
 "${command[@]}"
