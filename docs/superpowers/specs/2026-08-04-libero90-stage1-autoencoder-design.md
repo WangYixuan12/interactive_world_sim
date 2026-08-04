@@ -55,12 +55,16 @@ Add one CIAI batch launcher. Its training command will follow the README Stage
 - log every 100 steps;
 - validate every 6,000 steps with batch size 10;
 - save a resumable checkpoint every 10,000 steps;
-- use one GPU and remain within CIAI's 12-hour job limit.
+- use one GPU for a 48-hour total training budget, split into two resumable
+  24-hour allocations so each queued job retains higher priority than a
+  single 48-hour request.
 
 The launcher will reject a missing dataset, a task count other than 90, or a
 runtime without a visible CUDA device before starting training. Output and
-Slurm logs remain generated artifacts. A checkpoint override will allow a
-later job to resume toward the README's full step target.
+Slurm logs remain generated artifacts. A checkpoint override will allow the
+second 24-hour job to resume toward the README's full step target. The live
+scheduler accepted a 24-hour `sbatch --test-only` request on 2026-08-04 even
+though the bundled CSCC manual documents an older 12-hour maximum.
 
 ## Validation
 
