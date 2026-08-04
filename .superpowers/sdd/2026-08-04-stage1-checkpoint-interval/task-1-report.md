@@ -33,8 +33,19 @@ git diff --check
 
 Result: both commands exited successfully with no output.
 
-The requested `sbatch --test-only` command was not rerun after its initial
-sandbox socket denial. The controller will execute that cluster-side dry run.
+The controller successfully ran the prescribed dry run:
+
+```bash
+IWS_ROOT="$PWD" OUTPUT_DIR=/nfs-stor/youssef.ghallab/Robotics/continual_octo/outputs/real_libero90/stage1_checkpoint_5000_dry_run sbatch --test-only jobs/train_iws_libero90_stage1.sbatch
+```
+
+Result:
+
+```text
+sbatch: Job 147197 to start at 2026-08-04T20:33:59 a using 8 processors on nodes gpu-05 in partition cscc-gpu-p
+```
+
+This was a `--test-only` scheduling projection; no training job was submitted.
 
 ## Review
 
