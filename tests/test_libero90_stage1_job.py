@@ -20,3 +20,4 @@ def test_stage1_job_uses_readme_settings_and_two_views() -> None:
     assert "algorithm.training_stage=1" in script
     assert "RESUME_CKPT" in script
     assert 'WANDB_ENTITY="${WANDB_ENTITY:-youssef-ghallab-mbzuai}"' in script
+    assert 'IWS_ROOT="${IWS_ROOT:-/nfs-stor/youssef.ghallab/Robotics/continual_octo/interactive_world_sim}"' in script

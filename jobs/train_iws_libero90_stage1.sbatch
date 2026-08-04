@@ -11,7 +11,7 @@
 
 set -euo pipefail
 
-IWS_ROOT=/nfs-stor/youssef.ghallab/Robotics/continual_octo/interactive_world_sim
+IWS_ROOT="${IWS_ROOT:-/nfs-stor/youssef.ghallab/Robotics/continual_octo/interactive_world_sim}"
 LIBERO_ROOT="${LIBERO_ROOT:-/nfs-stor/youssef.ghallab/Robotics/libero_datasets/libero_100/libero_90}"
 OUTPUT_DIR="${OUTPUT_DIR:-/nfs-stor/youssef.ghallab/Robotics/continual_octo/outputs/real_libero90/stage1}"
 RESUME_CKPT="${RESUME_CKPT:-}"
