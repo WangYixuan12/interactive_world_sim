@@ -17,7 +17,7 @@ def test_stage1_job_uses_readme_settings_and_two_views() -> None:
     assert "experiment.validation.val_every_n_step=6000" in script
     assert "experiment.validation.batch_size=10" in script
     assert "experiment.validation.data.num_workers=8" in script
-    assert "experiment.training.checkpointing.every_n_train_steps=10000" in script
+    assert "experiment.training.checkpointing.every_n_train_steps=5000" in script
     assert "algorithm.latent_dim=512" in script
     assert "algorithm.action_dim=7" in script
     assert "algorithm.training_stage=1" in script

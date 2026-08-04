@@ -51,7 +51,7 @@ command=(
   experiment.validation.batch_size=10
   experiment.validation.data.num_workers=8
   experiment.validation.val_every_n_step=6000
-  experiment.training.checkpointing.every_n_train_steps=10000
+  experiment.training.checkpointing.every_n_train_steps=5000
   algorithm.latent_dim=512 algorithm.action_dim=7
   algorithm.training_stage=1
   "hydra.run.dir=$OUTPUT_DIR"
