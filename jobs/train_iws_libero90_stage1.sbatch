@@ -24,8 +24,10 @@ if (( ${#files[@]} != 90 )); then
   exit 1
 fi
 
+set +u
 source /home/youssef.ghallab/miniforge3/etc/profile.d/conda.sh
 conda activate /home/youssef.ghallab/miniforge3/envs/iws
+set -u
 python -c 'import torch; assert torch.cuda.is_available(), "CUDA is unavailable"'
 
 cd "$IWS_ROOT"
