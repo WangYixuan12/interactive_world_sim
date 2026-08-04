@@ -54,7 +54,8 @@ Add one CIAI batch launcher. Its training command will follow the README Stage
 - 1,000,005 target optimizer steps;
 - log every 100 steps;
 - validate every 6,000 steps with batch size 10;
-- save a resumable checkpoint every 10,000 steps;
+- save a resumable checkpoint every 5,000 steps so validation failures at
+  step 6,000 do not erase the entire allocation's training progress;
 - use one GPU for a 48-hour total training budget, split into two resumable
   24-hour allocations so each queued job retains higher priority than a
   single 48-hour request.
