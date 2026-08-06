@@ -67,13 +67,13 @@ command=(
   algorithm.sampling_strategy=terminal_only
   algorithm.val_render=false
   algorithm.training_stage=2
-  "algorithm.load_ae=$STAGE1_CKPT"
+  "algorithm.load_ae='$STAGE1_CKPT'"
   "hydra.run.dir=$OUTPUT_DIR"
   "wandb.mode=${WANDB_MODE:-online}"
   "wandb.entity=$WANDB_ENTITY"
 )
 
 if [[ -n "$RESUME_CKPT" ]]; then
-  command+=("load=$RESUME_CKPT")
+  command+=("load='$RESUME_CKPT'")
 fi
 "${command[@]}"
