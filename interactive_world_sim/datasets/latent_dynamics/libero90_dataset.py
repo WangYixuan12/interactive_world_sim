@@ -19,7 +19,7 @@ from .base_dataset import BaseImageDataset
 
 
 class Libero90Dataset(BaseImageDataset):
-    """Lazy frame dataset for LIBERO task HDF5 files."""
+    """Lazy temporal-window dataset for LIBERO task HDF5 files."""
 
     def __init__(self, cfg: DictConfig, split: str = "training") -> None:
         super().__init__()
@@ -31,6 +31,8 @@ class Libero90Dataset(BaseImageDataset):
         self.resolution = cfg.resolution
         self.action_dim = cfg.action_dim
         self.obs_keys = list(cfg.obs_keys)
+        self.horizon = cfg.horizon
+        self.val_horizon = cfg.val_horizon
         self._handles: dict[Path, h5py.File] = {}
 
         task_paths = sorted(Path(cfg.dataset_dir).glob("*.hdf5"))
@@ -40,8 +42,8 @@ class Libero90Dataset(BaseImageDataset):
             )
 
         self._demos: list[tuple[Path, str, int]] = []
-        self._frame_ends: list[int] = []
-        frame_end = 0
+        self._sample_ends: list[int] = []
+        sample_end = 0
         for path in task_paths:
             with h5py.File(path, "r") as file:
                 demos = sorted(file["data"], key=self._demo_index)
@@ -56,8 +58,9 @@ class Libero90Dataset(BaseImageDataset):
                 for demo_name in demos:
                     length = self._validate_demo(file["data"][demo_name])
                     self._demos.append((path, demo_name, length))
-                    frame_end += length
-                    self._frame_ends.append(frame_end)
+                    if split == "training":
+                        sample_end += max(length - self.horizon + 1, 0)
+                        self._sample_ends.append(sample_end)
 
         self.is_train = split == "training"
         self.is_val = split == "validation"
@@ -74,6 +77,8 @@ class Libero90Dataset(BaseImageDataset):
         if actions.ndim != 2 or actions.shape[1] != self.action_dim:
             raise ValueError(f"Expected actions with width {self.action_dim}")
         length = actions.shape[0]
+        if length == 0:
+            raise ValueError("Demonstrations must contain at least one frame")
         for key in self.obs_keys:
             images = demo["obs"][key]
             if images.shape != (length, self.resolution, self.resolution, 3):
@@ -84,7 +89,9 @@ class Libero90Dataset(BaseImageDataset):
         return length
 
     def __len__(self) -> int:
-        return self._frame_ends[-1] if self._frame_ends else 0
+        if self.split == "validation":
+            return len(self._demos)
+        return self._sample_ends[-1] if self._sample_ends else 0
 
     def _get_handle(self, path: Path) -> h5py.File:
         if path not in self._handles:
@@ -96,27 +103,44 @@ class Libero90Dataset(BaseImageDataset):
             idx += len(self)
         if not 0 <= idx < len(self):
             raise IndexError(idx)
-        demo_idx = bisect_right(self._frame_ends, idx)
-        frame_idx = idx - (self._frame_ends[demo_idx - 1] if demo_idx else 0)
+        if self.split == "training":
+            demo_idx = bisect_right(self._sample_ends, idx)
+            start = idx - (self._sample_ends[demo_idx - 1] if demo_idx else 0)
+            real_length = self.horizon
+        else:
+            demo_idx = idx
+            start = 0
+            real_length = min(self._demos[demo_idx][2], self.val_horizon)
         path, demo_name, _ = self._demos[demo_idx]
         demo = self._get_handle(path)["data"][demo_name]
         obs = {
-            key: torch.from_numpy(np.asarray(demo["obs"][key][frame_idx]))
-            .permute(2, 0, 1)
+            key: torch.from_numpy(
+                self._pad_terminal(
+                    np.asarray(demo["obs"][key][start : start + real_length])
+                )
+            )
+            .permute(0, 3, 1, 2)
             .float()
             .div(255.0)
-            .unsqueeze(0)
             for key in self.obs_keys
         }
+        actions = self._pad_terminal(
+            np.asarray(demo["actions"][start : start + real_length], dtype=np.float32)
+        )
         return {
             "obs": obs,
-            "goal": {key: value[0] for key, value in obs.items()},
-            "action": torch.from_numpy(
-                np.asarray(demo["actions"][frame_idx], dtype=np.float32)
-            ).unsqueeze(0),
+            "goal": {key: value[real_length - 1] for key, value in obs.items()},
+            "action": torch.from_numpy(actions),
             "is_early_stop": torch.tensor([False]),
-            "rel_stop_idx": torch.tensor([0]),
+            "rel_stop_idx": torch.tensor([real_length - 1]),
         }
+
+    def _pad_terminal(self, values: np.ndarray) -> np.ndarray:
+        if self.split == "training" or len(values) == self.val_horizon:
+            return values
+        return np.concatenate(
+            (values, np.repeat(values[-1:], self.val_horizon - len(values), axis=0))
+        )
 
     def get_validation_dataset(self) -> Libero90Dataset:
         return Libero90Dataset(self.cfg, split="validation")
