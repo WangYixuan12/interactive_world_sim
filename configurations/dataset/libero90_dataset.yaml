@@ -1,0 +1,11 @@
+defaults:
+  - base_dataset
+
+dataset_dir: /nfs-stor/youssef.ghallab/Robotics/libero_datasets/libero_100/libero_90
+expected_tasks: 90
+val_demos_per_task: 5
+horizon: 1
+val_horizon: 1
+resolution: 128
+action_dim: 7
+obs_keys: [agentview_rgb, eye_in_hand_rgb]
