@@ -35,6 +35,7 @@ def test_stage2_job_uses_temporal_dynamics_settings() -> None:
     assert 'CHECKPOINT_EVERY_N_STEPS="${CHECKPOINT_EVERY_N_STEPS:-10000}"' in script
     assert 'RESUME_CKPT="${RESUME_CKPT:-}"' in script
     assert '[[ -n "$RESUME_CKPT" && ! -f "$RESUME_CKPT" ]]' in script
+    assert "export TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD=1" in script
 
 
 def test_stage2_job_rejects_missing_stage1_checkpoint_before_conda(

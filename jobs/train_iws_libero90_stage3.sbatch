@@ -1,29 +1,29 @@
 #!/usr/bin/env bash
-#SBATCH --job-name=iws-libero90-s2
+#SBATCH --job-name=iws-libero90-s3
 #SBATCH --partition=cscc-gpu-p
 #SBATCH --qos=cscc-gpu-qos
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=64G
 #SBATCH --time=12:00:00
-#SBATCH --output=/nfs-stor/youssef.ghallab/Robotics/continual_octo/logs/slurm/iws-libero90-s2_%j.out
-#SBATCH --error=/nfs-stor/youssef.ghallab/Robotics/continual_octo/logs/slurm/iws-libero90-s2_%j.err
+#SBATCH --output=/nfs-stor/youssef.ghallab/Robotics/continual_octo/logs/slurm/iws-libero90-s3_%j.out
+#SBATCH --error=/nfs-stor/youssef.ghallab/Robotics/continual_octo/logs/slurm/iws-libero90-s3_%j.err
 
 set -euo pipefail
 
 IWS_ROOT="${IWS_ROOT:-/nfs-stor/youssef.ghallab/Robotics/continual_octo/interactive_world_sim}"
 LIBERO_ROOT="${LIBERO_ROOT:-/nfs-stor/youssef.ghallab/Robotics/libero_datasets/libero_100/libero_90}"
-STAGE1_CKPT="${STAGE1_CKPT:-/nfs-stor/youssef.ghallab/Robotics/continual_octo/outputs/real_libero90/stage1_validation_bounded/checkpoints/epoch=0-step=415000.ckpt}"
-OUTPUT_DIR="${OUTPUT_DIR:-/nfs-stor/youssef.ghallab/Robotics/continual_octo/outputs/real_libero90/stage2}"
+STAGE2_CKPT="${STAGE2_CKPT:-/nfs-stor/youssef.ghallab/Robotics/continual_octo/outputs/real_libero90/stage2/checkpoints/epoch=2-step=300000.ckpt}"
+OUTPUT_DIR="${OUTPUT_DIR:-/nfs-stor/youssef.ghallab/Robotics/continual_octo/outputs/real_libero90/stage3}"
 RESUME_CKPT="${RESUME_CKPT:-}"
 MAX_STEPS="${MAX_STEPS:-1000005}"
-TRAIN_BATCH_SIZE="${TRAIN_BATCH_SIZE:-4}"
+TRAIN_BATCH_SIZE="${TRAIN_BATCH_SIZE:-1}"
 VAL_EVERY_N_STEP="${VAL_EVERY_N_STEP:-30000}"
 CHECKPOINT_EVERY_N_STEPS="${CHECKPOINT_EVERY_N_STEPS:-10000}"
 WANDB_ENTITY="${WANDB_ENTITY:-youssef-ghallab-mbzuai}"
 
-if [[ ! -f "$STAGE1_CKPT" ]]; then
-  echo "STAGE1_CKPT must be a regular file: $STAGE1_CKPT" >&2
+if [[ ! -f "$STAGE2_CKPT" ]]; then
+  echo "STAGE2_CKPT must be a regular file: $STAGE2_CKPT" >&2
   exit 1
 fi
 if [[ -n "$RESUME_CKPT" && ! -f "$RESUME_CKPT" ]]; then
@@ -48,10 +48,10 @@ cd "$IWS_ROOT"
 mkdir -p "$OUTPUT_DIR"
 command=(
   python main.py
-  +name=libero90_stage2 algorithm=latent_world_model
+  +name=libero90_stage3 algorithm=latent_world_model
   experiment=exp_latent_dyn dataset=libero90_dataset
   "dataset.dataset_dir=$LIBERO_ROOT"
-  dataset.horizon=10 dataset.val_horizon=200
+  dataset.horizon=1 dataset.val_horizon=200
   dataset.obs_keys=[agentview_rgb,eye_in_hand_rgb]
   experiment.training.batch_size=$TRAIN_BATCH_SIZE
   experiment.training.max_steps=$MAX_STEPS
@@ -66,8 +66,8 @@ command=(
   algorithm.noise_scheduler.loss_weighting=uniform
   algorithm.sampling_strategy=terminal_only
   algorithm.val_render=false
-  algorithm.training_stage=2
-  "algorithm.load_ae='$STAGE1_CKPT'"
+  algorithm.training_stage=3
+  "algorithm.load_ae='$STAGE2_CKPT'"
   "hydra.run.dir=$OUTPUT_DIR"
   "wandb.mode=${WANDB_MODE:-online}"
   "wandb.entity=$WANDB_ENTITY"
